@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Magic</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #fff0f5;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .avatar-selection {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 4px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .avatar.selected {
+      border-color: #ff69b4;
+    }
+
+    select, button {
+      font-size: 18px;
+      padding: 10px 15px;
+      margin-top: 20px;
+    }
+
+    #start-btn {
+      display: none;
+    }
+  </style>
+  <script src="saveEngine.js"></script>
+</head>
+<body>
+  <h1>Welcome to Math Magic</h1>
+
+  <h2>Select Your Avatar</h2>
+  <div class="avatar-selection">
+    <img src="a1.png" alt="Avatar 1" class="avatar" onclick="selectAvatar('cat', 'blue')">
+    <img src="a2.png" alt="Avatar 2" class="avatar" onclick="selectAvatar('dog', 'pink')">
+    <img src="a3.png" alt="Avatar 3" class="avatar" onclick="selectAvatar('mouse', 'yellow')">
+  </div>
+
+  <h2>Select Your Grade</h2>
+  <select id="grade-select" onchange="checkReady()">
+    <option value="">-- Select Grade --</option>
+    <option value="0">Kindergarten</option>
+    <option value="1">1st Grade</option>
+    <option value="2">2nd Grade</option>
+    <option value="3">3rd Grade</option>
+    <option value="4">4th Grade</option>
+    <option value="5">5th Grade</option>
+  </select>
+
+  <br>
+  <button id="start-btn" onclick="startGame()">Start</button>
+
+  <script>
+    let avatar = null;
+
+    function selectAvatar(animal, color) {
+      avatar = { animal, color };
+      document.querySelectorAll('.avatar').forEach(img => img.classList.remove('selected'));
+      event.target.classList.add('selected');
+      checkReady();
+    }
+
+    function checkReady() {
+      const grade = document.getElementById("grade-select").value;
+      document.getElementById("start-btn").style.display =
+        grade !== "" && avatar !== null ? "inline-block" : "none";
+    }
+
+    function startGame() {
+      const grade = parseInt(document.getElementById("grade-select").value);
+      setAvatar(avatar.animal, avatar.color);
+      setGrade(grade);
+      unlockLand(1);  // Start in land 1
+      setCoins(0);    // Optional: reset coins on new game
+      window.location.href = "map_index.html";
+    }
+  </script>
+</body>
+</html>

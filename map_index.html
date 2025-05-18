@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Magic - World Map</title>
+  <style>
+    body {
+      margin: 0;
+      background: #cde;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .map-container {
+      position: relative;
+    }
+    .map-container img {
+      width: 100vw;
+      height: auto;
+      max-width: 600px;
+    }
+    .click-zone {
+      position: absolute;
+      border: 4px solid transparent;
+      cursor: pointer;
+    }
+    .click-zone:hover {
+      border-color: rgba(255, 255, 0, 0.5);
+    }
+    #woodland {
+      top: 100px;
+      left: 30px;
+      width: 130px;
+      height: 130px;
+    }
+  </style>
+</head>
+<body>
+  <div class="map-container">
+    <img src="map_map.png" alt="Math Magic World Map" />
+    <div class="click-zone" id="woodland" onclick="window.location.href='woodland_index.html'"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Magic World Map</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: url('https://cdn.pixabay.com/photo/2020/01/06/03/53/forest-4744330_1280.jpg') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .building {
+      font-size: 20px;
+      padding: 15px 25px;
+      margin: 10px;
+      border-radius: 10px;
+      background-color: #6b8e23;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Woodland Village</h1>
+  <button class="building" onclick="enterBuilding('hospital')">🏥 Hospital</button>
+  <button class="building" onclick="enterBuilding('lab')">🔬 Science Lab</button>
+  <button class="building" onclick="enterBuilding('store')">🛍️ Convenience Store</button>
+  <button class="building" onclick="enterBuilding('home')">🏡 Player Home</button>
+  <button class="building" onclick="enterBuilding('townhall')">🏛️ Townhall</button>
+
+  <script>
+    function enterBuilding(building) {
+      switch (building) {
+        case "hospital":
+          window.location.href = "hospital_index.html";
+          break;
+        case "lab":
+          window.location.href = "lab_index.html";
+          break;
+        case "store":
+          alert("Store not implemented yet!");
+          break;
+        case "home":
+          alert("Home not implemented yet!");
+          break;
+        case "townhall":
+          alert("Townhall not implemented yet!");
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
