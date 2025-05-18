@@ -98,12 +98,145 @@ function parsePattern(desc) {
 
 function generateQuestion(grade, level) {
   const gradeLogic = {
-    "4": {
-      "addition": {
-        "level_3": "add 3-digit + 1-digit ( carry)"
-      }
+  "0": {
+    "addition": {
+      "level_1": "add within 5 (e.g., 2 + 3)",
+      "level_2": "add within 10 (e.g., 6 + 3)",
+      "level_3": "add within 15 (e.g., 9+5)",
+      "level_4": "add within 20 (e.g., 9+8)",
+      "level_5": "add within 25 (e.g., 19+6)"
+    },
+    "subtraction": {},
+    "multiplication": {},
+    "division": {}
+  },
+  "1": {
+    "addition": {
+      "level_1": "add 2-digit + 1-digit (with carry)",
+      "level_2": "add 2-digit + 2-digit  within 50 (no carry)",
+      "level_3": "add 2-digit + 2-digit (no carry)",
+      "level_4": "add 2-digit + 2-digit ( carry) sum under 99",
+      "level_5": "add 2-digit + 2-digit ( carry)"
+    },
+    "subtraction": {
+      "level_3": "subtract within 10",
+      "level_4": "2-digit - 1-digit (no regroup)",
+      "level_5": "2-digit - 2-digit (with regroup) within 40"
+    },
+    "multiplication": {},
+    "division": {}
+  },
+  "2": {
+    "addition": {
+      "level_1": "add 2-digit + 2-digit ( carry) sum under 99",
+      "level_2": "add 2-digit + 2-digit ( carry)",
+      "level_3": "add 3-digit + 1-digit ( carry)",
+      "level_4": "add 3-digit + 2-digit ( no carry)",
+      "level_5": "add 3-digit + 2-digit ( carry)"
+    },
+    "subtraction": {
+      "level_1": "2-digit - 1-digit (no regroup)",
+      "level_2": "2-digit - 2-digit (with regroup) within 40",
+      "level_3": "2-digit - 2-digit (with regroup)",
+      "level_4": "3-digit - 2-digit (with regroup)",
+      "level_5": "3-digit - 2-digit (with regroup)"
+    },
+    "multiplication": {
+      "level_1": "multiply within 2s table (ie 2x3,2x8)",
+      "level_2": "multiply within 3s table (ie 3x4, 3x7)",
+      "level_3": "multiply within 4s or 5 table (4x6, 4x7, 5x9)",
+      "level_4": "multiply within 6s or 7 table (4x6, 4x7, 7x9)",
+      "level_5": "single-digit \u00d7 single-digit"
+    },
+    "division": {}
+  },
+  "3": {
+    "addition": {
+      "level_1": "add 3-digit + 2-digit ( no carry)",
+      "level_2": "add 3-digit + 2-digit ( carry)",
+      "level_3": "3-digit + 3-digit (carry once)",
+      "level_4": "3-digit + 3-digit (carry twice)",
+      "level_5": "3-digit + 3-digit"
+    },
+    "subtraction": {
+      "level_1": "3-digit - 2-digit (with regroup)",
+      "level_2": "3-digit - 2-digit (with regroup)",
+      "level_3": "3-digit - 3-digit (borrow twice)",
+      "level_4": "3-digit - 3-digit (borrow twice)",
+      "level_5": "3-digit - 3-digit (borrow twice)"
+    },
+    "multiplication": {
+      "level_1": "multiply within 6s or 7 table (4x6, 4x7, 7x9)",
+      "level_2": "single-digit \u00d7 single-digit",
+      "level_3": "single-digit (max 5) \u00d7 2-digit (max 20 - ie 4x15)",
+      "level_4": "single-digit \u00d7 2-digit (max 20 - ie 7x19)",
+      "level_5": "single-digit \u00d7 2-digit (max 30 - ie 7x29)"
+    },
+    "division": {
+      "level_5": "2-digit \u00f7 1-digit"
     }
-  };
+  },
+  "4": {
+    "addition": {
+      "level_1": "3-digit + 3-digit (carry twice)",
+      "level_2": "3-digit + 3-digit",
+      "level_3": "3-digit + 4-digit",
+      "level_4": "3-digit + 4-digit",
+      "level_5": "4-digit + 4-digit"
+    },
+    "subtraction": {
+      "level_1": "3-digit - 3-digit (borrow twice)",
+      "level_2": "3-digit - 3-digit (borrow twice)",
+      "level_3": "4-digit - 3-digit (borrow twice)",
+      "level_4": "4-digit - 3-digit (borrow 3 times)",
+      "level_5": "4-digit - 3-digit (borrow 3 times)"
+    },
+    "multiplication": {
+      "level_1": "single-digit (max 5) \u00d7 2-digit (max 20 - ie 4x15)",
+      "level_2": "single-digit \u00d7 2-digit (max 20 - ie 7x19)",
+      "level_3": "single-digit \u00d7 2-digit (max 30 - ie 7x29)",
+      "level_4": "single-digit \u00d7 2-digit (max 50 - ie 7x49)",
+      "level_5": "single-digit \u00d7 2-digit"
+    },
+    "division": {
+      "level_1": "2-digit \u00f7 1-digit",
+      "level_2": "2-digit \u00f7 1-digit",
+      "level_3": "3-digit \u00f7 1-digit",
+      "level_4": "3-digit \u00f7 1-digit",
+      "level_5": "3-digit \u00f7 2-digit"
+    }
+  },
+  "5": {
+    "addition": {
+      "level_1": "3-digit + 4-digit",
+      "level_2": "4-digit + 4-digit",
+      "level_3": "4-digit + 4-digit",
+      "level_4": "4-digit + 5-digit",
+      "level_5": "5-digit + 5-digit"
+    },
+    "subtraction": {
+      "level_1": "4-digit - 3-digit (borrow 3 times)",
+      "level_2": "4-digit - 3-digit (borrow 3 times)",
+      "level_3": "4-digit - 4-digit (borrow 3 times)",
+      "level_4": "4-digit - 4-digit (borrow 3 times)",
+      "level_5": "5-digit - 5-digit (borrow 3 times)"
+    },
+    "multiplication": {
+      "level_1": "single-digit \u00d7 2-digit (max 50 - ie 7x49)",
+      "level_2": "single-digit \u00d7 2-digit",
+      "level_3": "2-digit (multiple of 5) \u00d7 2-digit",
+      "level_4": "2-digit (max50) \u00d7 2-digit (max50)",
+      "level_5": "2-digit \u00d7 2-digit"
+    },
+    "division": {
+      "level_1": "3-digit \u00f7 1-digit",
+      "level_2": "3-digit \u00f7 2-digit",
+      "level_3": "3-digit \u00f7 2-digit",
+      "level_4": "3-digit \u00f7 2-digit",
+      "level_5": "4-digit \u00f7 2-digit"
+    }
+  }
+};
 
   const gradeData = gradeLogic[grade];
   const levelKey = "level_" + level;
