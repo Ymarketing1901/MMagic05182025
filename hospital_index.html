@@ -94,10 +94,19 @@
   </a>
 
 <script>
-const rawSave = JSON.parse(localStorage.getItem("mathMagicSave") || "{}");
-const grade = parseInt(rawSave.grade || "1");
-const land = parseInt(rawSave.currentLand || "1");
-const difficulty = Math.min(Math.max(land, 1), 5);
+let grade = 1;
+let land = 1;
+let difficulty = 1;
+
+try {
+  const rawSave = JSON.parse(localStorage.getItem("mathMagicSave") || "{}");
+  grade = parseInt(rawSave.grade || "1");
+  land = parseInt(rawSave.currentLand || "1");
+  difficulty = Math.min(Math.max(land, 1), 5);
+  console.log("Loaded from save:", { grade, land, difficulty });
+} catch (e) {
+  console.warn("No mathMagicSave found, defaulting to Grade 1, Land 1.");
+}
 const save = getSave();
 
 let index = save.hospitalProgress?.[land]?.correct || 0;
