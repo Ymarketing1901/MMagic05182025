@@ -1,5 +1,5 @@
 
-// coin.js
+// coinEngine.js
 
 const COIN_KEY = "mm-coins";
 
@@ -33,3 +33,6 @@ function updateCoinDisplays() {
 
 // Optional: auto-update coin display on page load
 document.addEventListener("DOMContentLoaded", updateCoinDisplays);
+
+// ✅ Export for ES module support
+export { getCoins as getCoinCount, setCoins, addCoins, spendCoins };
