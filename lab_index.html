@@ -160,130 +160,94 @@
   <div id="gauge"><div id="timer-bar"></div></div>
   <div id="feedback"></div>
 
-<script type="module">
-  import { generateEquation } from './equationQuery.js';
-  import { addCoins, getCoinCount } from './coinEngine.js';
+  <script type="module">
+    import { generateEquation } from './equationQuery.js';
+    import { addCoins, getCoinCount } from './coinEngine.js';
 
-  const grade = parseInt(localStorage.getItem('grade-select') || "1");
-  const difficulty = parseInt(localStorage.getItem('currentDifficulty') || "1");
+    const grade = parseInt(localStorage.getItem('grade-select') || "1");
+    const difficulty = parseInt(localStorage.getItem('currentDifficulty') || "1");
 
-  let correctAnswers = 0;
-  let questionCount = 0;
+    let correctAnswers = 0;
+    let questionCount = 0;
 
-  function updateCoinDisplay() {
-    document.getElementById('coin-box').innerText = "Coins: " + getCoinCount();
-  }
-
-  
-  function showQuestion() {
-    if (correctAnswers >= 50) {
-      document.getElementById('question-box').innerText = "🔬 Lab session complete!";
-      document.querySelector(".numpad").style.display = "none";
-      return;
+    function updateCoinDisplay() {
+      document.getElementById('coin-box').innerText = "Coins: " + getCoinCount();
     }
 
-    if (questionCount > 0 && questionCount % 10 === 0) {
-      document.getElementById('feedback').innerText = "💡 Take a quick breather!";
-      return;
-    }
-
-    const { equation, correctAnswer, decoys, type } = generateEquation(grade, difficulty);
-    document.getElementById('question-box').innerText = equation;
-    document.getElementById('input-box').value = "";
-    document.getElementById('feedback').textContent = "";
-
-    window.currentCorrectAnswer = correctAnswer;
-
-    const bar = document.getElementById("timer-bar");
-    bar.style.width = "100%";
-    bar.style.transition = "width 30s linear";
-    setTimeout(() => {
-      bar.style.width = "0%";
-    }, 50);
-
-    window.timerStart = Date.now();
-    window.timerInterval = setInterval(() => {
-      const elapsed = (Date.now() - window.timerStart) / 1000;
-      if (elapsed >= 30) {
-        clearInterval(window.timerInterval);
-        submitAnswer();
+    async function showQuestion() {
+      if (correctAnswers >= 50) {
+        document.getElementById('question-box').innerText = "🔬 Lab session complete!";
+        document.querySelector(".numpad").style.display = "none";
+        return;
       }
-    }, 100);
-  }
 
-    if (correctAnswers >= 50) {
-      document.getElementById('question-box').innerText = "🔬 Lab session complete!";
-      document.querySelector(".numpad").style.display = "none";
-      return;
+      if (questionCount > 0 && questionCount % 10 === 0) {
+        document.getElementById('feedback').innerText = "💡 Take a quick breather!";
+        return;
+      }
+
+      const { equation, correctAnswer } = await generateEquation(grade, difficulty, 'lab');
+
+      document.getElementById('question-box').innerText = equation;
+      document.getElementById('input-box').value = "";
+      document.getElementById('feedback').textContent = "";
+      window.currentCorrectAnswer = correctAnswer;
+
+      // Reset and animate timer bar
+      const bar = document.getElementById("timer-bar");
+      bar.style.transition = "none";
+      bar.style.width = "100%";
+      setTimeout(() => {
+        bar.style.transition = "width 30s linear";
+        bar.style.width = "0%";
+      }, 50);
+
+      window.timerStart = Date.now();
+      window.timerInterval = setInterval(() => {
+        const elapsed = (Date.now() - window.timerStart) / 1000;
+        if (elapsed >= 30) {
+          clearInterval(window.timerInterval);
+          submitAnswer();
+        }
+      }, 100);
     }
 
-    if (questionCount > 0 && questionCount % 10 === 0) {
-      document.getElementById('feedback').innerText = "💡 Take a quick breather!";
-      return;
+    function appendDigit(d) {
+      document.getElementById("input-box").value += d;
     }
 
-    const { equation, correctAnswer, decoys, type } = generateEquation(grade, difficulty);
-    document.getElementById('question-box').innerText = equation;
-    document.getElementById('input-box').value = "";
-    document.getElementById('feedback').textContent = "";
+    function clearInput() {
+      let val = document.getElementById("input-box").value;
+      document.getElementById("input-box").value = val.slice(0, -1);
+    }
 
-    // Store the current correct answer
-    window.currentCorrectAnswer = correctAnswer;
-  }
+    function submitAnswer() {
+      clearInterval(window.timerInterval);
+      const input = document.getElementById("input-box").value.trim();
+      const timeTaken = (Date.now() - window.timerStart) / 1000;
 
-  function appendDigit(d) {
-    document.getElementById("input-box").value += d;
-  }
+      let reward = 0;
+      if (input === window.currentCorrectAnswer) {
+        if (timeTaken <= 10) reward = 5;
+        else if (timeTaken <= 20) reward = 3;
+        else if (timeTaken <= 30) reward = 2;
 
-  function clearInput() {
-    let val = document.getElementById("input-box").value;
-    document.getElementById("input-box").value = val.slice(0, -1);
-  }
+        correctAnswers++;
+        addCoins(reward);
+        document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
+      } else {
+        document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
+      }
 
-  
-  function submitAnswer() {
-    clearInterval(window.timerInterval);
-    const input = document.getElementById("input-box").value.trim();
-    const timeTaken = (Date.now() - window.timerStart) / 1000;
-    let reward = 0;
-
-    if (input === window.currentCorrectAnswer) {
-      if (timeTaken <= 10) reward = 5;
-      else if (timeTaken <= 20) reward = 3;
-      else if (timeTaken <= 30) reward = 2;
-
-      correctAnswers++;
-      addCoins(reward);
       updateCoinDisplay();
-      document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
-    } else {
-      document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
+      questionCount++;
+      document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
+
+      setTimeout(showQuestion, 1500);
     }
 
-    questionCount++;
-    document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
-
-    setTimeout(showQuestion, 2000); // Grace period
-  }
-
-    const input = document.getElementById("input-box").value.trim();
-    if (input === window.currentCorrectAnswer) {
-      correctAnswers++;
-      addCoins(5); // lab gives 5 coins max
-      updateCoinDisplay();
-      document.getElementById('feedback').textContent = `✅ Correct! +5 coins`;
-    } else {
-      document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
-    }
-    questionCount++;
-    document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
-    setTimeout(showQuestion, 1500);
-  }
-
-  updateCoinDisplay();
-  showQuestion();
-</script>
+    updateCoinDisplay();
+    showQuestion();
+  </script>
 </body>
-</html>
-
 </html>
