@@ -5,45 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Science Lab</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
       font-family: sans-serif;
       background: url('Lab.png') no-repeat center center fixed;
       background-size: cover;
-      text-align: center;
-      padding: 40px;
       color: white;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2vh;
+      box-sizing: border-box;
     }
 
     h1 {
-      font-size: 3em;
-      color: white;
+      font-size: 5vw;
+      margin: 0.5em 0;
     }
 
     #coin-box, #progress {
-      margin-top: 10px;
-      font-size: 1.3em;
+      font-size: 1.2em;
       background: rgba(255, 255, 255, 0.85);
       color: black;
-      padding: 10px 15px;
+      padding: 6px 12px;
       border-radius: 10px;
-      display: inline-block;
+      margin: 5px;
     }
 
     #question-box {
-      font-size: 2.2em;
-      margin: 30px auto;
-      padding: 20px;
+      font-size: 1.8em;
+      padding: 15px;
       background: rgba(255, 255, 255, 0.85);
       color: black;
-      width: 60%;
+      width: 90vw;
+      max-width: 500px;
       border-radius: 12px;
+      margin-top: 15px;
     }
 
     #input-box {
-      font-size: 2em;
-      padding: 12px;
-      width: 140px;
-      margin: 10px auto;
+      font-size: 1.5em;
+      padding: 10px;
+      width: 100px;
+      margin: 10px 0;
       text-align: center;
       border-radius: 10px;
       border: 2px solid #ccc;
@@ -51,42 +62,30 @@
 
     .numpad {
       display: grid;
-      grid-template-columns: repeat(3, 80px);
-      gap: 15px;
+      grid-template-columns: repeat(3, 60px);
+      gap: 10px;
       justify-content: center;
-      margin: 20px 0;
+      margin-top: 10px;
     }
 
     .numpad button {
-      font-size: 1.5em;
-      padding: 20px;
-      border-radius: 12px;
+      font-size: 1.3em;
+      padding: 14px;
+      border-radius: 10px;
       border: none;
-      background: #a8ff78;
       background: linear-gradient(to right, #a8ff78, #78ffd6);
       color: black;
-      cursor: pointer;
       font-weight: bold;
       box-shadow: 2px 2px 0 #000;
-    }
-
-    #submit-btn {
-      font-size: 1.5em;
-      padding: 12px 24px;
-      margin-top: 20px;
-    }
-
-    #feedback {
-      font-size: 1.5em;
-      margin-top: 15px;
+      cursor: pointer;
     }
 
     #gauge {
-      width: 200px;
-      height: 20px;
+      width: 150px;
+      height: 18px;
       background: linear-gradient(to right, green 0%, orange 50%, red 100%);
-      margin: 10px auto;
       border-radius: 10px;
+      margin-top: 10px;
       position: relative;
     }
 
@@ -99,50 +98,63 @@
       left: 0;
     }
 
+    #feedback {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
     #intro-modal {
       position: fixed;
       top: 10%;
-      left: 15%;
-      width: 70%;
+      left: 10%;
+      width: 80%;
       background: white;
       color: black;
-      padding: 30px;
+      padding: 20px;
       border: 5px solid black;
       border-radius: 20px;
       text-align: center;
       z-index: 1000;
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      box-shadow: 10px 10px 0 #000;
+      box-shadow: 8px 8px 0 #000;
     }
 
     #intro-modal button {
       background: linear-gradient(to right, #a8ff78, #78ffd6);
       border: 3px solid #000;
-      border-radius: 12px;
-      padding: 12px 30px;
-      font-size: 1.2em;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 1em;
       font-weight: bold;
       color: black;
-      cursor: pointer;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
       box-shadow: 4px 4px 0 #000;
-      transition: transform 0.2s, background 0.3s;
+      margin-top: 10px;
     }
 
+    @media (max-height: 600px) {
+      #question-box {
+        font-size: 1.5em;
+        padding: 10px;
+      }
+      .numpad button {
+        padding: 10px;
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>Science Lab</h1>
 
   <div id="intro-modal">
-    <p style="font-size: 1.2em;">You have made it to the science lab!<br><br>Get up to 5 coins per correct answer.</p>
+    <p>You have made it to the science lab!<br><br>Get up to 5 coins per correct answer.</p>
     <button onclick="document.getElementById('intro-modal').style.display='none'">Let's go</button>
   </div>
 
   <div id="coin-box">Coins: 0</div>
   <div id="progress">Questions Solved: 0 / 50</div>
   <div id="question-box">Loading...</div>
-  <input id="input-box" readonly />
+  <input id="input-box" />
   <div class="numpad">
     <button onclick="appendDigit('1')">1</button>
     <button onclick="appendDigit('2')">2</button>
@@ -193,7 +205,6 @@
       document.getElementById('feedback').textContent = "";
       window.currentCorrectAnswer = correctAnswer;
 
-      // Reset and animate timer bar
       const bar = document.getElementById("timer-bar");
       bar.style.transition = "none";
       bar.style.width = "100%";
@@ -217,8 +228,8 @@
     }
 
     function clearInput() {
-      let val = document.getElementById("input-box").value;
-      document.getElementById("input-box").value = val.slice(0, -1);
+      const input = document.getElementById("input-box");
+      input.value = input.value.slice(0, -1);
     }
 
     function submitAnswer() {
