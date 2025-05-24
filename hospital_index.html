@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -125,9 +126,10 @@
     </a>
   </div>
 
-  <div id="break-modal">
-    <p>Time for a quick break?</p>
-    <button onclick="resumeGame()">Continue</button>
+  <div id="break-modal" style="position: fixed; top: 25%; left: 20%; width: 60%; background: white; color: black; padding: 30px; border: 5px solid black; border-radius: 20px; text-align: center; z-index: 1000; font-family: 'Comic Sans MS', cursive, sans-serif; box-shadow: 10px 10px 0 #000;">
+    <p style="font-size: 1.5em; margin-bottom: 20px;">Time for a quick break?</p>
+    <button onclick="resumeGame()" style="margin: 10px; background: linear-gradient(to right, #a8ff78, #78ffd6); border: 3px solid #000; border-radius: 12px; padding: 12px 30px; font-size: 1.2em; font-weight: bold; color: black; cursor: pointer; font-family: 'Comic Sans MS', cursive, sans-serif; box-shadow: 4px 4px 0 #000;">Continue</button>
+    <button onclick="goToMap()" style="margin: 10px; background: linear-gradient(to right, #ffcf71, #ff6e7f); border: 3px solid #000; border-radius: 12px; padding: 12px 30px; font-size: 1.2em; font-weight: bold; color: black; cursor: pointer; font-family: 'Comic Sans MS', cursive, sans-serif; box-shadow: 4px 4px 0 #000;">Back to the map</button>
   </div>
 
   <script type="module">
@@ -189,6 +191,13 @@
     }
 
     function resumeGame() {
+      document.getElementById('break-modal').style.display = "none";
+    }
+
+    function goToMap() {
+      const land = localStorage.getItem("currentLand") || "land1";
+      window.location.href = land + "_index.html";
+    }
       document.getElementById('break-modal').style.display = "none";
       showQuestion();
     }
