@@ -224,47 +224,49 @@
       userAnswer += d;
       updateDisplay();
     }
+    window.appendDigit = appendDigit;
 
     function clearInput() {
       userAnswer = userAnswer.slice(0, -1);
       updateDisplay();
     }
+    window.clearInput = clearInput;
 
     function updateDisplay() {
       document.getElementById("input-display").textContent = userAnswer === "" ? "\u00A0" : userAnswer;
     }
 
-function submitAnswer() {
-  clearInterval(window.timerInterval);
-  const input = userAnswer.trim();
-  const timeTaken = (Date.now() - window.timerStart) / 1000;
+    function submitAnswer() {
+      clearInterval(window.timerInterval);
+      const input = userAnswer.trim();
+      const timeTaken = (Date.now() - window.timerStart) / 1000;
 
-  let reward = 0;
-  if (input === window.currentCorrectAnswer) {
-    if (timeTaken <= 10) reward = 5;
-    else if (timeTaken <= 20) reward = 3;
-    else if (timeTaken <= 30) reward = 2;
+      let reward = 0;
+      if (input === window.currentCorrectAnswer) {
+        if (timeTaken <= 10) reward = 5;
+        else if (timeTaken <= 20) reward = 3;
+        else if (timeTaken <= 30) reward = 2;
 
-    correctAnswers++;
-    addCoins(reward);
-    document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
+        correctAnswers++;
+        addCoins(reward);
+        document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
 
-    // ✅ SAVE LAB COMPLETION FOR CURRENT LAND
-    if (correctAnswers >= 50) {
-      const land = localStorage.getItem('currentLand') || 'land1';
-      localStorage.setItem(`labComplete_${land}`, 'true');
+        // ✅ Record lab complete per current land
+        if (correctAnswers >= 50) {
+          const land = localStorage.getItem('currentLand') || 'land1';
+          localStorage.setItem(`labComplete_${land}`, 'true');
+        }
+      } else {
+        document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
+      }
+
+      updateCoinDisplay();
+      questionCount++;
+      document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
+
+      setTimeout(showQuestion, 1500);
     }
-
-  } else {
-    document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
-  }
-
-  updateCoinDisplay();
-  questionCount++;
-  document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
-
-  setTimeout(showQuestion, 1500);
-}
+    window.submitAnswer = submitAnswer;
 
     updateCoinDisplay();
     showQuestion();
