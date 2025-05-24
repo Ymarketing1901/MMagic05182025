@@ -49,9 +49,13 @@
   </div>
 
   <script>
-    function enter(location) {
-      alert("Entering " + location + "...");
-    }
-  </script>
+  // Set current land and difficulty
+  localStorage.setItem("currentLand", "land1");
+  localStorage.setItem("currentDifficulty", "1");
+
+  function enter(location) {
+    alert("Entering " + location + "...");
+  }
+</script>
 </body>
 </html>
