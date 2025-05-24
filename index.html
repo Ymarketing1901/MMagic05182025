@@ -94,14 +94,15 @@
         grade !== "" && avatar !== null ? "inline-block" : "none";
     }
 
-    function startGame() {
-      const grade = parseInt(document.getElementById("grade-select").value);
-      setAvatar(avatar.animal, avatar.color);
-      setGrade(grade);
-      unlockLand(1);  // Start in land 1
-      setCoins(0);    // Optional: reset coins on new game
-      window.location.href = "map_index.html";
-    }
+function startGame() {
+  const grade = parseInt(document.getElementById("grade-select").value);
+  setAvatar(avatar.animal, avatar.color);
+  setGrade(grade);
+  localStorage.setItem('grade-select', grade); // Ensure compatibility
+  unlockLand(1);  // Start in land 1
+  setCoins(0);    // Optional: reset coins on new game
+  window.location.href = "map_index.html";
+}
   </script>
 </body>
 </html>
