@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,55 +6,81 @@
   <title>Science Lab</title>
   <style>
     body {
-  font-family: sans-serif;
-  background: url('Lab.png') no-repeat center center fixed;
-  background-size: cover;
-  text-align: center;
-  padding: 40px;
-}
+      font-family: sans-serif;
+      background: url('Lab.png') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      padding: 40px;
+      color: white;
+    }
+
     h1 {
-      font-size: 28px;
+      font-size: 3em;
+      color: white;
     }
+
+    #coin-box, #progress {
+      margin-top: 10px;
+      font-size: 1.3em;
+      background: rgba(255, 255, 255, 0.85);
+      color: black;
+      padding: 10px 15px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
     #question-box {
-      font-size: 24px;
-      margin: 20px 0;
+      font-size: 2.2em;
+      margin: 30px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      color: black;
+      width: 60%;
+      border-radius: 12px;
     }
+
     #input-box {
-      font-size: 24px;
-      padding: 10px;
-      width: 120px;
+      font-size: 2em;
+      padding: 12px;
+      width: 140px;
       margin: 10px auto;
       text-align: center;
+      border-radius: 10px;
+      border: 2px solid #ccc;
     }
+
     .numpad {
       display: grid;
-      grid-template-columns: repeat(3, 70px);
-      gap: 10px;
+      grid-template-columns: repeat(3, 80px);
+      gap: 15px;
       justify-content: center;
       margin: 20px 0;
     }
+
     .numpad button {
-      font-size: 20px;
-      padding: 15px;
-      border-radius: 10px;
+      font-size: 1.5em;
+      padding: 20px;
+      border-radius: 12px;
       border: none;
-      background-color: #4CAF50;
-      color: white;
+      background: #a8ff78;
+      background: linear-gradient(to right, #a8ff78, #78ffd6);
+      color: black;
       cursor: pointer;
+      font-weight: bold;
+      box-shadow: 2px 2px 0 #000;
     }
+
     #submit-btn {
-      font-size: 18px;
-      padding: 10px 20px;
-      margin-top: 15px;
+      font-size: 1.5em;
+      padding: 12px 24px;
+      margin-top: 20px;
     }
+
     #feedback {
-      font-size: 20px;
+      font-size: 1.5em;
       margin-top: 15px;
     }
-    #coin-box, #progress {
-      margin-top: 15px;
-      font-size: 18px;
-    }
+
     #gauge {
       width: 200px;
       height: 20px;
@@ -64,6 +89,7 @@
       border-radius: 10px;
       position: relative;
     }
+
     #timer-bar {
       height: 100%;
       background-color: rgba(0,0,0,0.2);
@@ -72,25 +98,47 @@
       top: 0;
       left: 0;
     }
+
+    #intro-modal {
+      position: fixed;
+      top: 10%;
+      left: 15%;
+      width: 70%;
+      background: white;
+      color: black;
+      padding: 30px;
+      border: 5px solid black;
+      border-radius: 20px;
+      text-align: center;
+      z-index: 1000;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      box-shadow: 10px 10px 0 #000;
+    }
+
+    #intro-modal button {
+      background: linear-gradient(to right, #a8ff78, #78ffd6);
+      border: 3px solid #000;
+      border-radius: 12px;
+      padding: 12px 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      box-shadow: 4px 4px 0 #000;
+      transition: transform 0.2s, background 0.3s;
+    }
+
   </style>
-  <script src="coinEngine.js"></script>
-<style>
-  .coin-animate {
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: gold;
-    font-size: 20px;
-    animation: popUp 1s ease-out forwards;
-  }
-  @keyframes popUp {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-20px); }
-  }
-</style>
 </head>
 <body>
   <h1>Science Lab</h1>
+
+  <div id="intro-modal">
+    <p style="font-size: 1.2em;">You have made it to the science lab!<br><br>Get up to 5 coins per correct answer.</p>
+    <button onclick="document.getElementById('intro-modal').style.display='none'">Let's go</button>
+  </div>
+
   <div id="coin-box">Coins: 0</div>
   <div id="progress">Questions Solved: 0 / 50</div>
   <div id="question-box">Loading...</div>
@@ -112,207 +160,130 @@
   <div id="gauge"><div id="timer-bar"></div></div>
   <div id="feedback"></div>
 
-  <script>
-    let coins = 0;
-    let index = 0;
-    let questions = [];
-    let current;
-    let timerStart, timerInterval;
+<script type="module">
+  import { generateEquation } from './equationQuery.js';
+  import { addCoins, getCoinCount } from './coinEngine.js';
 
-    const grade = parseInt(JSON.parse(localStorage.getItem("mathMagicSave") || "{}").grade || "1");
-    const land = parseInt(JSON.parse(localStorage.getItem("mathMagicSave") || "{}").currentLand || "1");
-    const difficulty = Math.min(Math.max(land, 1), 5);
+  const grade = parseInt(localStorage.getItem('grade-select') || "1");
+  const difficulty = parseInt(localStorage.getItem('currentDifficulty') || "1");
 
-    
-const GENERATOR_SPEC = [
-  { grade: 0, level: 1, type: "addition", range_min: 1, range_max: 5 },
-  { grade: 0, level: 2, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 0, level: 3, type: "addition", range_min: 1, range_max: 15 },
-  { grade: 0, level: 4, type: "addition", range_min: 1, range_max: 20 },
-  { grade: 0, level: 5, type: "addition", range_min: 1, range_max: 25 },
-  { grade: 1, level: 1, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 1, level: 2, type: "addition", range_min: 1, range_max: 5 },
-  { grade: 1, level: 3, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 1, level: 4, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 1, level: 5, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 1, level: 2, type: "subtraction", range_min: 1, range_max: 10 },
-  { grade: 1, level: 3, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 1, level: 4, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 1, level: 5, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 2, level: 1, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 2, level: 2, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 2, level: 3, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 2, level: 4, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 2, level: 5, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 2, level: 1, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 2, level: 2, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 2, level: 3, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 2, level: 4, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 2, level: 5, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 2, level: 1, type: "multiplication", range_min: 1, range_max: 10 },
-  { grade: 2, level: 2, type: "multiplication", range_min: 1, range_max: 10 },
-  { grade: 2, level: 3, type: "multiplication", range_min: 1, range_max: 10 },
-  { grade: 2, level: 4, type: "multiplication", range_min: 1, range_max: 10 },
-  { grade: 2, level: 5, type: "multiplication", range_min: 1, range_max: 9 },
-  { grade: 3, level: 1, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 3, level: 2, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 3, level: 3, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 3, level: 4, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 3, level: 5, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 3, level: 1, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 3, level: 2, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 3, level: 3, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 3, level: 4, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 3, level: 5, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 3, level: 1, type: "multiplication", range_min: 1, range_max: 10 },
-  { grade: 3, level: 2, type: "multiplication", range_min: 1, range_max: 9 },
-  { grade: 3, level: 3, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 3, level: 4, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 3, level: 5, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 3, level: 5, type: "division", range_min: 10, range_max: 99 },
-  { grade: 4, level: 1, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 4, level: 2, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 4, level: 3, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 4, level: 4, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 4, level: 5, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 4, level: 1, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 4, level: 2, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 4, level: 3, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 4, level: 4, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 4, level: 5, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 4, level: 1, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 4, level: 2, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 4, level: 3, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 4, level: 4, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 4, level: 5, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 4, level: 1, type: "division", range_min: 10, range_max: 99 },
-  { grade: 4, level: 2, type: "division", range_min: 10, range_max: 99 },
-  { grade: 4, level: 3, type: "division", range_min: 100, range_max: 999 },
-  { grade: 4, level: 4, type: "division", range_min: 100, range_max: 999 },
-  { grade: 4, level: 5, type: "division", range_min: 100, range_max: 999 },
-  { grade: 5, level: 1, type: "addition", range_min: 100, range_max: 999 },
-  { grade: 5, level: 2, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 5, level: 3, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 5, level: 4, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 5, level: 5, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 5, level: 1, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 5, level: 2, type: "subtraction", range_min: 100, range_max: 999 },
-  { grade: 5, level: 3, type: "subtraction", range_min: 1, range_max: 10 },
-  { grade: 5, level: 4, type: "subtraction", range_min: 1, range_max: 10 },
-  { grade: 5, level: 5, type: "subtraction", range_min: 1, range_max: 10 },
-  { grade: 5, level: 1, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 5, level: 2, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 5, level: 3, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 5, level: 4, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 5, level: 5, type: "multiplication", range_min: 10, range_max: 99 },
-  { grade: 5, level: 1, type: "division", range_min: 100, range_max: 999 },
-  { grade: 5, level: 2, type: "division", range_min: 100, range_max: 999 },
-  { grade: 5, level: 3, type: "division", range_min: 100, range_max: 999 },
-  { grade: 5, level: 4, type: "division", range_min: 100, range_max: 999 },
-  { grade: 5, level: 5, type: "division", range_min: 10, range_max: 99 },
-];
+  let correctAnswers = 0;
+  let questionCount = 0;
 
-
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function generateQuestion(grade, difficulty) {
-  const options = GENERATOR_SPEC.filter(
-    s => s.grade === grade && s.level === difficulty
-  );
-  const spec = options.length ? options[Math.floor(Math.random() * options.length)] : null;
-  if (!spec) return { text: "Error loading question", answer: "0" };
-
-  const a = randomInt(spec.range_min, spec.range_max);
-  const b = randomInt(spec.range_min, spec.range_max);
-
-  switch (spec.type) {
-    case "addition":
-      return { text: `What is ${a} + ${b}?`, answer: (a + b).toString() };
-    case "subtraction":
-      const top = Math.max(a, b), bottom = Math.min(a, b);
-      return { text: `What is ${top} - ${bottom}?`, answer: (top - bottom).toString() };
-    case "multiplication":
-      return { text: `What is ${a} × ${b}?`, answer: (a * b).toString() };
-    case "division":
-      const product = a * b;
-      return { text: `What is ${product} ÷ ${a}?`, answer: b.toString() };
-    case "missing_addend":
-      const total = a + b;
-      return { text: `__ + ${a} = ${total}`, answer: b.toString() };
-    default:
-      return { text: "???", answer: "0" };
+  function updateCoinDisplay() {
+    document.getElementById('coin-box').innerText = "Coins: " + getCoinCount();
   }
-}
 
-function generateQuestion() {
-      const a = Math.floor(Math.random() * 90) + 10;
-      const b = Math.floor(Math.random() * 90) + 10;
-      const answer = a + b;
-      return { text: `What is ${a} + ${b}?`, answer: answer.toString() };
+  
+  function showQuestion() {
+    if (correctAnswers >= 50) {
+      document.getElementById('question-box').innerText = "🔬 Lab session complete!";
+      document.querySelector(".numpad").style.display = "none";
+      return;
     }
 
-    function loadQuestion() {
-      if (index >= 50) {
-        document.getElementById("question-box").textContent = "🔬 Lab session complete!";
-        document.querySelector(".numpad").style.display = "none";
-        return;
+    if (questionCount > 0 && questionCount % 10 === 0) {
+      document.getElementById('feedback').innerText = "💡 Take a quick breather!";
+      return;
+    }
+
+    const { equation, correctAnswer, decoys, type } = generateEquation(grade, difficulty);
+    document.getElementById('question-box').innerText = equation;
+    document.getElementById('input-box').value = "";
+    document.getElementById('feedback').textContent = "";
+
+    window.currentCorrectAnswer = correctAnswer;
+
+    const bar = document.getElementById("timer-bar");
+    bar.style.width = "100%";
+    bar.style.transition = "width 30s linear";
+    setTimeout(() => {
+      bar.style.width = "0%";
+    }, 50);
+
+    window.timerStart = Date.now();
+    window.timerInterval = setInterval(() => {
+      const elapsed = (Date.now() - window.timerStart) / 1000;
+      if (elapsed >= 30) {
+        clearInterval(window.timerInterval);
+        submitAnswer();
       }
+    }, 100);
+  }
 
-      current = generateQuestion();
-      document.getElementById("question-box").textContent = current.text;
-      document.getElementById("input-box").value = "";
-      document.getElementById("feedback").textContent = "";
-      document.getElementById("progress").textContent = `Questions Solved: ${index} / 50`;
-      startTimer();
+    if (correctAnswers >= 50) {
+      document.getElementById('question-box').innerText = "🔬 Lab session complete!";
+      document.querySelector(".numpad").style.display = "none";
+      return;
     }
 
-    function appendDigit(d) {
-      document.getElementById("input-box").value += d;
+    if (questionCount > 0 && questionCount % 10 === 0) {
+      document.getElementById('feedback').innerText = "💡 Take a quick breather!";
+      return;
     }
 
-    function clearInput() {
-      let val = document.getElementById("input-box").value;
-      document.getElementById("input-box").value = val.slice(0, -1);
+    const { equation, correctAnswer, decoys, type } = generateEquation(grade, difficulty);
+    document.getElementById('question-box').innerText = equation;
+    document.getElementById('input-box').value = "";
+    document.getElementById('feedback').textContent = "";
+
+    // Store the current correct answer
+    window.currentCorrectAnswer = correctAnswer;
+  }
+
+  function appendDigit(d) {
+    document.getElementById("input-box").value += d;
+  }
+
+  function clearInput() {
+    let val = document.getElementById("input-box").value;
+    document.getElementById("input-box").value = val.slice(0, -1);
+  }
+
+  
+  function submitAnswer() {
+    clearInterval(window.timerInterval);
+    const input = document.getElementById("input-box").value.trim();
+    const timeTaken = (Date.now() - window.timerStart) / 1000;
+    let reward = 0;
+
+    if (input === window.currentCorrectAnswer) {
+      if (timeTaken <= 10) reward = 5;
+      else if (timeTaken <= 20) reward = 3;
+      else if (timeTaken <= 30) reward = 2;
+
+      correctAnswers++;
+      addCoins(reward);
+      updateCoinDisplay();
+      document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
+    } else {
+      document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
     }
 
-    function submitAnswer() {
-      clearInterval(timerInterval);
-      const input = document.getElementById("input-box").value.trim();
-      const timeTaken = (Date.now() - timerStart) / 1000;
-      let reward = 0;
-      if (input === current.answer) {
-        if (timeTaken <= 5) reward = 5;
-        else if (timeTaken <= 10) reward = 3;
-        else if (timeTaken <= 20) reward = 2;
-        coins += reward;
-        index++;
-        document.getElementById("feedback").textContent = `✅ Correct! +${reward} coins`;
-      } else {
-        document.getElementById("feedback").textContent = `❌ The correct answer was ${current.answer}`;
-        index++;
-      }
-      document.getElementById("coin-box").textContent = `Coins: ${coins}`;
-      setTimeout(loadQuestion, 2000);
-    }
+    questionCount++;
+    document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
 
-    function startTimer() {
-      const bar = document.getElementById("timer-bar");
-      bar.style.width = "100%";
-      timerStart = Date.now();
-      timerInterval = setInterval(() => {
-        const elapsed = (Date.now() - timerStart) / 1000;
-        if (elapsed >= 20) {
-          clearInterval(timerInterval);
-          submitAnswer();
-        } else {
-          bar.style.width = `${100 - (elapsed / 20) * 100}%`;
-        }
-      }, 100);
-    }
+    setTimeout(showQuestion, 2000); // Grace period
+  }
 
-    loadQuestion();
-  </script>
+    const input = document.getElementById("input-box").value.trim();
+    if (input === window.currentCorrectAnswer) {
+      correctAnswers++;
+      addCoins(5); // lab gives 5 coins max
+      updateCoinDisplay();
+      document.getElementById('feedback').textContent = `✅ Correct! +5 coins`;
+    } else {
+      document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
+    }
+    questionCount++;
+    document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
+    setTimeout(showQuestion, 1500);
+  }
+
+  updateCoinDisplay();
+  showQuestion();
+</script>
 </body>
+</html>
+
 </html>
