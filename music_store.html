@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Music Store</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .song-container {
+      background: #222;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px auto;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .artist-title {
+      font-size: 1.5em;
+      margin: 30px 0 10px;
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 10px;
+      font-size: 0.9em;
+      cursor: pointer;
+      border-radius: 8px;
+      background: #444;
+      color: white;
+      border: none;
+    }
+
+    iframe {
+      margin-top: 20px;
+      width: 100%;
+      height: 280px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    #coin-count {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎶 Music Store 🎶</h1>
+  <div id="coin-count">Coins: <span id="coins">100</span></div>
+
+  <div id="store"></div>
+
+  <script>
+    let coins = 100;
+    const songs = [
+      {
+        artist: "Taylor Swift",
+        tracks: [
+          { title: "Shake It Off", id: "nfWlot6h_JM" },
+          { title: "Blank Space", id: "e-ORhEE9VVg" },
+          { title: "Anti-Hero", id: "b1kbLwvqugk" },
+          { title: "You Belong With Me", id: "VuNIsY6JdUw" },
+          { title: "Cruel Summer", id: "ic8j13piAhQ" }
+        ]
+      },
+      {
+        artist: "Lady Gaga",
+        tracks: [
+          { title: "Bad Romance", id: "qrO4YZeyl0I" },
+          { title: "Poker Face", id: "bESGLojNYSo" },
+          { title: "Born This Way", id: "wV1FrqwZyKw" },
+          { title: "Rain On Me", id: "AoAm4om0wTs" },
+          { title: "Shallow (with Bradley Cooper)", id: "bo_efYhYU2A" }
+        ]
+      },
+      {
+        artist: "Dua Lipa",
+        tracks: [
+          { title: "Levitating", id: "TUVcZfQe-Kw" },
+          { title: "Don't Start Now", id: "oygrmJFKYZY" },
+          { title: "New Rules", id: "k2qgadSvNyU" },
+          { title: "Physical", id: "9HDEHj2yzew" },
+          { title: "One Kiss (with Calvin Harris)", id: "DkeiKbqa02g" }
+        ]
+      },
+      {
+        artist: "Olivia Rodrigo",
+        tracks: [
+          { title: "drivers license", id: "ZmDBbnmKpqQ" },
+          { title: "good 4 u", id: "gNi_6U5Pm_o" },
+          { title: "vampire", id: "2d4Hp7jZ9x8" },
+          { title: "deja vu", id: "cii6ruuycQA" },
+          { title: "traitor", id: "nWHUjuJ8zxE" }
+        ]
+      },
+      {
+        artist: "Ariana Grande",
+        tracks: [
+          { title: "7 rings", id: "QYh6mYIJG2Y" },
+          { title: "thank u, next", id: "gl1aHhXnN1k" },
+          { title: "Into You", id: "1ekZEVeXwek" },
+          { title: "No Tears Left To Cry", id: "ffxKSjUwKdU" },
+          { title: "Positions", id: "tcYodQoapMg" }
+        ]
+      },
+      {
+        artist: "Katy Perry",
+        tracks: [
+          { title: "Roar", id: "CevxZvSJLk8" },
+          { title: "Dark Horse", id: "0KSOMA3QBU0" },
+          { title: "Firework", id: "QGJuMBdaqIw" },
+          { title: "Teenage Dream", id: "98WtmW-lfeE" },
+          { title: "Last Friday Night", id: "KlyXNRrsk4A" }
+        ]
+      }
+    ];
+
+    const store = document.getElementById("store");
+    const coinDisplay = document.getElementById("coins");
+
+    songs.forEach(({ artist, tracks }) => {
+      const header = document.createElement("div");
+      header.className = "artist-title";
+      header.innerText = artist;
+      store.appendChild(header);
+
+      tracks.forEach(({ title, id }) => {
+        const container = document.createElement("div");
+        container.className = "song-container";
+
+        const h2 = document.createElement("h3");
+        h2.innerText = `"${title}"`;
+        container.appendChild(h2);
+
+        const unlockBtn = document.createElement("button");
+        unlockBtn.innerText = "Unlock (30 coins)";
+        const replayBtn = document.createElement("button");
+        replayBtn.innerText = "Replay (10 coins)";
+        replayBtn.disabled = true;
+
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${id}`;
+        iframe.allow = "autoplay; encrypted-media";
+        iframe.allowFullscreen = true;
+
+        container.appendChild(unlockBtn);
+        container.appendChild(replayBtn);
+        container.appendChild(iframe);
+        store.appendChild(container);
+
+        unlockBtn.onclick = () => {
+          if (coins >= 30) {
+            coins -= 30;
+            coinDisplay.innerText = coins;
+            iframe.style.display = "block";
+            iframe.src += "";
+            unlockBtn.disabled = true;
+            replayBtn.disabled = false;
+          } else {
+            alert("Not enough coins to unlock.");
+          }
+        };
+
+        replayBtn.onclick = () => {
+          if (coins >= 10) {
+            coins -= 10;
+            coinDisplay.innerText = coins;
+            iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+          } else {
+            alert("Not enough coins to replay.");
+          }
+        };
+      });
+    });
+  </script>
+
+</body>
+</html>
