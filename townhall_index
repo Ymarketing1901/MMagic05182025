@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Townhall</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: url('Townhall.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 1em 2em;
+      font-size: 1.5em;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .locked {
+      background: gray;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .unlocked {
+      background: gold;
+      color: black;
+    }
+
+    .back {
+      background: #0066cc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Townhall</h1>
+  <button id="unlockBtn" class="locked" disabled>🔒 Unlock Next Land</button>
+  <button class="back" onclick="goBack()">⬅️ Back to Map</button>
+
+  <script>
+    const currentLand = localStorage.getItem('currentLand') || 'land1';
+    const labComplete = localStorage.getItem(`labComplete_${currentLand}`) === 'true';
+    const unlockBtn = document.getElementById('unlockBtn');
+
+    if (labComplete) {
+      unlockBtn.textContent = '🔓 Unlock Next Land';
+      unlockBtn.classList.remove('locked');
+      unlockBtn.classList.add('unlocked');
+      unlockBtn.disabled = false;
+
+      unlockBtn.onclick = () => {
+        const nextLandNum = parseInt(currentLand.replace('land', '')) + 1;
+        const nextLand = `land${nextLandNum}`;
+        localStorage.setItem('currentLand', nextLand);
+        localStorage.setItem('currentDifficulty', nextLandNum.toString());
+        window.location.href = `map_${nextLand}.html`;
+      };
+    }
+
+    function goBack() {
+      window.location.href = `map_${currentLand}.html`;
+    }
+  </script>
+</body>
+</html>
