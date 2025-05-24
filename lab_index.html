@@ -54,6 +54,7 @@
       font-size: 1.5em;
       padding: 10px;
       width: 100px;
+      min-height: 1.5em;
       margin: 10px 0;
       text-align: center;
       border-radius: 10px;
@@ -145,7 +146,8 @@
   <div id="coin-box">Coins: 0</div>
   <div id="progress">Questions Solved: 0 / 50</div>
   <div id="question-box">Loading...</div>
-  <div id="input-display"> </div>
+  <div id="input-display">\u00A0</div>
+
   <div class="numpad">
     <button onclick="appendDigit('1')">1</button>
     <button onclick="appendDigit('2')">2</button>
@@ -160,6 +162,7 @@
     <button onclick="appendDigit('0')">0</button>
     <button onclick="submitAnswer()">✔️</button>
   </div>
+
   <div id="gauge"><div id="timer-bar"></div></div>
   <div id="feedback"></div>
 
@@ -228,7 +231,7 @@
     }
 
     function updateDisplay() {
-      document.getElementById("input-display").textContent = userAnswer || " ";
+      document.getElementById("input-display").textContent = userAnswer === "" ? "\u00A0" : userAnswer;
     }
 
     function submitAnswer() {
