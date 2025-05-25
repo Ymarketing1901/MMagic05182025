@@ -242,7 +242,8 @@
       const timeTaken = (Date.now() - window.timerStart) / 1000;
 
       let reward = 0;
-      if (input === window.currentCorrectAnswer) {
+     if (parseInt(input) === parseInt(window.currentCorrectAnswer))
+ {
         if (timeTaken <= 10) reward = 5;
         else if (timeTaken <= 20) reward = 3;
         else if (timeTaken <= 30) reward = 2;
