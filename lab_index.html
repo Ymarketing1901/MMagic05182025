@@ -71,7 +71,7 @@
       margin-top: 10px;
     }
 
-    .numpad button {
+    .numpad button, #next-btn {
       font-size: 1.3em;
       padding: 14px;
       border-radius: 10px;
@@ -88,22 +88,10 @@
       display: none;
     }
 
-    #next-btn {
-      font-size: 1.3em;
-      padding: 14px 30px;
-      border-radius: 10px;
-      border: none;
-      background: linear-gradient(to right, #a8ff78, #78ffd6);
-      color: black;
-      font-weight: bold;
-      box-shadow: 2px 2px 0 #000;
-      cursor: pointer;
-    }
-
     #gauge {
       width: 150px;
       height: 18px;
-      background: linear-gradient(to right, green 0%, orange 50%, red 100%);
+      background: #ddd;
       border-radius: 10px;
       margin-top: 10px;
       position: relative;
@@ -111,7 +99,7 @@
 
     #timer-bar {
       height: 100%;
-      background-color: rgba(0,0,0,0.2);
+      background: linear-gradient(to right, green, yellow, red);
       width: 100%;
       position: absolute;
       top: 0;
@@ -123,7 +111,7 @@
       margin-top: 10px;
     }
 
-    #intro-modal {
+    #intro-modal, #completion-modal {
       position: fixed;
       top: 10%;
       left: 10%;
@@ -139,22 +127,25 @@
       box-shadow: 8px 8px 0 #000;
     }
 
-    #intro-modal button {
-      background: linear-gradient(to right, #a8ff78, #78ffd6);
-      border: 3px solid #000;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-size: 1em;
-      font-weight: bold;
-      color: black;
-      box-shadow: 4px 4px 0 #000;
-      margin-top: 10px;
+    #completion-stars {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+
+    #map-icon {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      background: url('map-icon.png') no-repeat center center;
+      background-size: cover;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>Science Lab</h1>
-
   <div id="intro-modal">
     <p>You have made it to the science lab!<br><br>Get up to 5 coins per correct answer.</p>
     <button onclick="document.getElementById('intro-modal').style.display='none'">Let's go</button>
@@ -163,8 +154,7 @@
   <div id="coin-box">Coins: 0</div>
   <div id="progress">Questions Solved: 0 / 50</div>
   <div id="question-box">Loading...</div>
-  <div id="input-display">\u00A0</div>
-
+  <div id="input-display"> </div>
   <div class="numpad">
     <button onclick="appendDigit('1')">1</button>
     <button onclick="appendDigit('2')">2</button>
@@ -182,10 +172,9 @@
 
   <div id="gauge"><div id="timer-bar"></div></div>
   <div id="feedback"></div>
-
-  <div id="next-btn-container">
-    <button id="next-btn" onclick="nextQuestion()">Next ➡️</button>
-  </div>
+  <div id="next-btn-container"><button id="next-btn" onclick="nextQuestion()">Next ➡️</button></div>
+  <div id="completion-modal" style="display:none;"></div>
+  <a id="map-icon" href="map_map.html" title="Back to map"></a>
 
   <script type="module">
     import { generateEquation } from './equationQuery.js';
@@ -193,10 +182,12 @@
 
     const grade = parseInt(localStorage.getItem('grade-select') || "1");
     const difficulty = parseInt(localStorage.getItem('currentDifficulty') || "1");
+    const land = localStorage.getItem('currentLand') || 'land1';
 
     let correctAnswers = 0;
     let questionCount = 0;
     let userAnswer = "";
+    let timerInterval = null;
 
     function updateCoinDisplay() {
       document.getElementById('coin-box').innerText = "Coins: " + getCoinCount();
@@ -204,17 +195,10 @@
 
     async function showQuestion() {
       document.getElementById("next-btn-container").style.display = "none";
+      document.getElementById("timer-bar").style.transition = "none";
+      document.getElementById("timer-bar").style.width = "100%";
 
-      if (correctAnswers >= 50) {
-        document.getElementById('question-box').innerText = "🔬 Lab session complete!";
-        document.querySelector(".numpad").style.display = "none";
-        return;
-      }
-
-      if (questionCount > 0 && questionCount % 10 === 0) {
-        document.getElementById('feedback').innerText = "💡 Take a quick breather!";
-        return;
-      }
+      if (correctAnswers >= 50) return;
 
       const { equation, correctAnswer } = await generateEquation(grade, difficulty, 'lab');
 
@@ -225,19 +209,16 @@
       document.getElementById('feedback').textContent = "";
       window.currentCorrectAnswer = correctAnswer;
 
-      const bar = document.getElementById("timer-bar");
-      bar.style.transition = "none";
-      bar.style.width = "100%";
       setTimeout(() => {
-        bar.style.transition = "width 30s linear";
-        bar.style.width = "0%";
+        document.getElementById("timer-bar").style.transition = "width 30s linear";
+        document.getElementById("timer-bar").style.width = "0%";
       }, 50);
 
       window.timerStart = Date.now();
-      window.timerInterval = setInterval(() => {
+      timerInterval = setInterval(() => {
         const elapsed = (Date.now() - window.timerStart) / 1000;
         if (elapsed >= 30) {
-          clearInterval(window.timerInterval);
+          clearInterval(timerInterval);
           submitAnswer();
         }
       }, 100);
@@ -260,33 +241,30 @@
     }
 
     function submitAnswer() {
-      clearInterval(window.timerInterval);
+      clearInterval(timerInterval);
       const input = userAnswer.trim();
       const timeTaken = (Date.now() - window.timerStart) / 1000;
-
       let reward = 0;
-      if (parseInt(input) === parseInt(window.currentCorrectAnswer)) {
+
+      const isCorrect = parseInt(input) === parseInt(window.currentCorrectAnswer);
+      if (isCorrect) {
         if (timeTaken <= 10) reward = 5;
         else if (timeTaken <= 20) reward = 3;
         else if (timeTaken <= 30) reward = 2;
-
         correctAnswers++;
         addCoins(reward);
-        document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
-
-        if (correctAnswers >= 50) {
-          const land = localStorage.getItem('currentLand') || 'land1';
-          localStorage.setItem(`labComplete_${land}`, 'true');
-        }
-      } else {
-        document.getElementById('feedback').textContent = `❌ The correct answer was ${window.currentCorrectAnswer}`;
       }
+
+      document.getElementById('feedback').textContent = isCorrect
+        ? `✅ Correct! +${reward} coins | Answer: ${window.currentCorrectAnswer}`
+        : `❌ The correct answer was ${window.currentCorrectAnswer} | +0 coins`;
 
       updateCoinDisplay();
       questionCount++;
       document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
 
-      document.getElementById("next-btn-container").style.display = "block";
+      if (questionCount >= 50) showCompletion();
+      else document.getElementById("next-btn-container").style.display = "block";
     }
     window.submitAnswer = submitAnswer;
 
@@ -294,6 +272,27 @@
       showQuestion();
     }
     window.nextQuestion = nextQuestion;
+
+    function showCompletion() {
+      const modal = document.getElementById("completion-modal");
+      modal.innerHTML = `
+        <h2>🎉 Congratulations!</h2>
+        <p>You have completed the Science Lab!</p>
+        <div id="completion-stars">${getStars(correctAnswers)}</div>
+        <p>You answered ${correctAnswers} questions correctly.</p>
+        <button onclick="window.location.href='townhall_index.html'">To Townhall</button>
+      `;
+      modal.style.display = "block";
+      localStorage.setItem(`labScore_${land}`, correctAnswers);
+    }
+
+    function getStars(score) {
+      if (score < 10) return "⭐";
+      if (score <= 20) return "⭐⭐";
+      if (score <= 35) return "⭐⭐⭐";
+      if (score <= 45) return "⭐⭐⭐⭐";
+      return "⭐⭐⭐⭐⭐";
+    }
 
     updateCoinDisplay();
     showQuestion();
