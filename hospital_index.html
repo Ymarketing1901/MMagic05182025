@@ -129,7 +129,19 @@
 
   <div id="break-modal">
     <p>Time for a quick break?</p>
-    <button onclick="resumeGame()">Continue</button>
+    <button onclick="resumeGame()" style="
+  background: linear-gradient(to right, #a8ff78, #78ffd6);
+  border: 3px solid #000;
+  border-radius: 12px;
+  padding: 12px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  box-shadow: 4px 4px 0 #000;
+">Continue</button>
+
   </div>
 
   <script type="module">
@@ -192,7 +204,6 @@
 
     function resumeGame() {
       document.getElementById('break-modal').style.display = "none";
-      showQuestion();
     }
 
     updateCoinDisplay();
