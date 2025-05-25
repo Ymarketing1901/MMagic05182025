@@ -83,6 +83,23 @@
       cursor: pointer;
     }
 
+    #next-btn-container {
+      margin-top: 10px;
+      display: none;
+    }
+
+    #next-btn {
+      font-size: 1.3em;
+      padding: 14px 30px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(to right, #a8ff78, #78ffd6);
+      color: black;
+      font-weight: bold;
+      box-shadow: 2px 2px 0 #000;
+      cursor: pointer;
+    }
+
     #gauge {
       width: 150px;
       height: 18px;
@@ -166,6 +183,10 @@
   <div id="gauge"><div id="timer-bar"></div></div>
   <div id="feedback"></div>
 
+  <div id="next-btn-container">
+    <button id="next-btn" onclick="nextQuestion()">Next ➡️</button>
+  </div>
+
   <script type="module">
     import { generateEquation } from './equationQuery.js';
     import { addCoins, getCoinCount } from './coinEngine.js';
@@ -182,6 +203,8 @@
     }
 
     async function showQuestion() {
+      document.getElementById("next-btn-container").style.display = "none";
+
       if (correctAnswers >= 50) {
         document.getElementById('question-box').innerText = "🔬 Lab session complete!";
         document.querySelector(".numpad").style.display = "none";
@@ -242,8 +265,7 @@
       const timeTaken = (Date.now() - window.timerStart) / 1000;
 
       let reward = 0;
-     if (parseInt(input) === parseInt(window.currentCorrectAnswer))
- {
+      if (parseInt(input) === parseInt(window.currentCorrectAnswer)) {
         if (timeTaken <= 10) reward = 5;
         else if (timeTaken <= 20) reward = 3;
         else if (timeTaken <= 30) reward = 2;
@@ -252,7 +274,6 @@
         addCoins(reward);
         document.getElementById('feedback').textContent = `✅ Correct! +${reward} coins`;
 
-        // ✅ Record lab complete per current land
         if (correctAnswers >= 50) {
           const land = localStorage.getItem('currentLand') || 'land1';
           localStorage.setItem(`labComplete_${land}`, 'true');
@@ -265,9 +286,14 @@
       questionCount++;
       document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
 
-      setTimeout(showQuestion, 1500);
+      document.getElementById("next-btn-container").style.display = "block";
     }
     window.submitAnswer = submitAnswer;
+
+    function nextQuestion() {
+      showQuestion();
+    }
+    window.nextQuestion = nextQuestion;
 
     updateCoinDisplay();
     showQuestion();
