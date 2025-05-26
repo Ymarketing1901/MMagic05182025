@@ -167,10 +167,10 @@
         return;
       }
 
-      if (questionCount > 0 && questionCount % 10 === 0) {
-        document.getElementById('break-modal').style.display = "block";
-        return;
-      }
+     // if (questionCount > 0 && questionCount % 10 === 0) {
+      //  document.getElementById('break-modal').style.display = "block";
+      //  return;
+      //}
 
       const { equation, correctAnswer, decoys, type } = generateEquation(grade, difficulty);
       document.getElementById('question').innerText = equation;
