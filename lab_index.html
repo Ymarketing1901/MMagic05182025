@@ -261,7 +261,7 @@
 
       updateCoinDisplay();
       questionCount++;
-      document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
+      document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / ${questionCount}`;
 
       // ✅ Save progress after each answer
       localStorage.setItem(`labProgress_${land}`, JSON.stringify({
@@ -301,7 +301,16 @@
     }
 
     updateCoinDisplay();
-    showQuestion();
+
+// ✅ Load previous progress if it exists
+const savedProgress = JSON.parse(localStorage.getItem(`labProgress_${land}`));
+if (savedProgress) {
+  correctAnswers = savedProgress.correctAnswers || 0;
+  questionCount = savedProgress.questionCount || 0;
+  document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / ${questionCount}`;
+}
+
+showQuestion();
   </script>
 </body>
 </html>
