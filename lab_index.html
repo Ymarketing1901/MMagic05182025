@@ -242,6 +242,10 @@
 
     function submitAnswer() {
       clearInterval(timerInterval);
+  // 🛠 Stop CSS animation visually
+  const timerBar = document.getElementById("timer-bar");
+  timerBar.style.transition = "none";
+  timerBar.style.width = "0%";
       const input = userAnswer.trim();
       const timeTaken = (Date.now() - window.timerStart) / 1000;
       let reward = 0;
