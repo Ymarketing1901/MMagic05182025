@@ -88,7 +88,7 @@
       display: none;
     }
 
-        #gauge {
+    #gauge {
       width: 150px;
       height: 18px;
       background: linear-gradient(to right, red 0%, orange 50%, green 100%);
@@ -262,6 +262,12 @@
       updateCoinDisplay();
       questionCount++;
       document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / 50`;
+
+      // ✅ Save progress after each answer
+      localStorage.setItem(`labProgress_${land}`, JSON.stringify({
+        correctAnswers,
+        questionCount
+      }));
 
       if (questionCount >= 50) showCompletion();
       else document.getElementById("next-btn-container").style.display = "block";
