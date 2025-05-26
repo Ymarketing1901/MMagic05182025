@@ -85,7 +85,7 @@
     let unlockedSongs = JSON.parse(localStorage.getItem("unlockedSongs") || "{}");
     updateCoinDisplay();
 
-    const songs = [
+        const songs = [
       {
         artist: "Taylor Swift",
         tracks: [
@@ -96,7 +96,56 @@
           { title: "Cruel Summer", id: "ic8j13piAhQ" }
         ]
       },
-      // … other artists here
+      {
+        artist: "Lady Gaga",
+        tracks: [
+          { title: "Bad Romance", id: "qrO4YZeyl0I" },
+          { title: "Poker Face", id: "bESGLojNYSo" },
+          { title: "Born This Way", id: "wV1FrqwZyKw" },
+          { title: "Rain On Me", id: "AoAm4om0wTs" },
+          { title: "Shallow (with Bradley Cooper)", id: "bo_efYhYU2A" }
+        ]
+      },
+      {
+        artist: "Dua Lipa",
+        tracks: [
+          { title: "Levitating", id: "TUVcZfQe-Kw" },
+          { title: "Don't Start Now", id: "oygrmJFKYZY" },
+          { title: "New Rules", id: "k2qgadSvNyU" },
+          { title: "Physical", id: "9HDEHj2yzew" },
+          { title: "One Kiss (with Calvin Harris)", id: "DkeiKbqa02g" }
+        ]
+      },
+      {
+        artist: "Olivia Rodrigo",
+        tracks: [
+          { title: "drivers license", id: "ZmDBbnmKpqQ" },
+          { title: "good 4 u", id: "gNi_6U5Pm_o" },
+          { title: "vampire", id: "2d4Hp7jZ9x8" },
+          { title: "deja vu", id: "cii6ruuycQA" },
+          { title: "traitor", id: "nWHUjuJ8zxE" }
+        ]
+      },
+      {
+        artist: "Ariana Grande",
+        tracks: [
+          { title: "7 rings", id: "QYh6mYIJG2Y" },
+          { title: "thank u, next", id: "gl1aHhXnN1k" },
+          { title: "Into You", id: "1ekZEVeXwek" },
+          { title: "No Tears Left To Cry", id: "ffxKSjUwKdU" },
+          { title: "Positions", id: "tcYodQoapMg" }
+        ]
+      },
+      {
+        artist: "Katy Perry",
+        tracks: [
+          { title: "Roar", id: "CevxZvSJLk8" },
+          { title: "Dark Horse", id: "0KSOMA3QBU0" },
+          { title: "Firework", id: "QGJuMBdaqIw" },
+          { title: "Teenage Dream", id: "98WtmW-lfeE" },
+          { title: "Last Friday Night", id: "KlyXNRrsk4A" }
+        ]
+      }
     ];
 
     function saveUnlockedSongs() {
