@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <title>Music Store</title>
   <style>
-   body {
-  font-family: sans-serif;
-  background: url('musicshop-bg-vertical.png') repeat-y top center;
-  background-color: #111;
-  background-size: cover;
-  color: white;
-  text-align: center;
-  padding: 40px;
-}
+    body {
+      font-family: sans-serif;
+      background: url('musicshop-bg-vertical.png') repeat-y top center;
+      background-color: #111;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
 
     h1 {
       font-size: 2.5em;
@@ -52,21 +52,37 @@
       display: none;
     }
 
-    #coin-count {
+    #coin-counter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(to right, gold, orange);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: bold;
       font-size: 1.3em;
-      margin-bottom: 20px;
+      color: black;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
 
   <h1>🎶 Music Store 🎶</h1>
-  <div id="coin-count">Coins: <span id="coins">100</span></div>
-
+  <div id="coin-counter">Coins: 0</div>
   <div id="store"></div>
 
+  <script src="coinEngine.js"></script>
   <script>
-    let coins = 100;
+    const store = document.getElementById("store");
+
+    function updateCoinDisplay() {
+      document.getElementById('coin-counter').innerText = "Coins: " + getCoinCount();
+    }
+
+    let unlockedSongs = JSON.parse(localStorage.getItem("unlockedSongs") || "{}");
+    updateCoinDisplay();
+
     const songs = [
       {
         artist: "Taylor Swift",
@@ -130,8 +146,9 @@
       }
     ];
 
-    const store = document.getElementById("store");
-    const coinDisplay = document.getElementById("coins");
+    function saveUnlockedSongs() {
+      localStorage.setItem("unlockedSongs", JSON.stringify(unlockedSongs));
+    }
 
     songs.forEach(({ artist, tracks }) => {
       const header = document.createElement("div");
@@ -149,6 +166,7 @@
 
         const unlockBtn = document.createElement("button");
         unlockBtn.innerText = "Unlock (30 coins)";
+
         const replayBtn = document.createElement("button");
         replayBtn.innerText = "Replay (10 coins)";
         replayBtn.disabled = true;
@@ -157,29 +175,40 @@
         iframe.src = `https://www.youtube.com/embed/${id}`;
         iframe.allow = "autoplay; encrypted-media";
         iframe.allowFullscreen = true;
+        iframe.style.display = "none";
 
         container.appendChild(unlockBtn);
         container.appendChild(replayBtn);
         container.appendChild(iframe);
         store.appendChild(container);
 
+        const key = `${artist}-${title}`;
+
+        if (unlockedSongs[key]) {
+          iframe.style.display = "block";
+          unlockBtn.disabled = true;
+          replayBtn.disabled = false;
+        }
+
         unlockBtn.onclick = () => {
-          if (coins >= 30) {
-            coins -= 30;
-            coinDisplay.innerText = coins;
+          if (getCoinCount() >= 30) {
+            spendCoins(30);
+            updateCoinDisplay();
             iframe.style.display = "block";
-            iframe.src += "";
             unlockBtn.disabled = true;
             replayBtn.disabled = false;
+            unlockedSongs[key] = true;
+            saveUnlockedSongs();
           } else {
             alert("Not enough coins to unlock.");
           }
         };
 
         replayBtn.onclick = () => {
-          if (coins >= 10) {
-            coins -= 10;
-            coinDisplay.innerText = coins;
+          if (!unlockedSongs[key]) return;
+          if (getCoinCount() >= 10) {
+            spendCoins(10);
+            updateCoinDisplay();
             iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
           } else {
             alert("Not enough coins to replay.");
@@ -188,6 +217,5 @@
       });
     });
   </script>
-
 </body>
 </html>
