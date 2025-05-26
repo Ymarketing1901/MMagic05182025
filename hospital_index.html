@@ -202,9 +202,11 @@
       });
     }
 
-    function resumeGame() {
-      document.getElementById('break-modal').style.display = "none";
-    }
+ window.resumeGame = function () {
+  document.getElementById('break-modal').style.display = "none";
+  showQuestion();
+};
+
 
     updateCoinDisplay();
     document.getElementById('correct-counter').innerText = correctAnswers + "/50";
