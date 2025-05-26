@@ -72,91 +72,10 @@
   <div id="coin-counter">Coins: 0</div>
   <div id="store"></div>
 
+  <!-- Load your main logic as a module -->
   <script type="module">
-  import { getCoinCount, spendCoins } from './coinEngine.js';
+    import { getCoinCount, spendCoins } from './coinEngine.js';
 
-  const store = document.getElementById("store");
-
-  function updateCoinDisplay() {
-    document.getElementById('coin-counter').innerText = "Coins: " + getCoinCount();
-  }
-
-  let unlockedSongs = JSON.parse(localStorage.getItem("unlockedSongs") || "{}");
-  updateCoinDisplay();
-
-  const songs = [/* your songs array as before */];
-
-  function saveUnlockedSongs() {
-    localStorage.setItem("unlockedSongs", JSON.stringify(unlockedSongs));
-  }
-
-  songs.forEach(({ artist, tracks }) => {
-    const header = document.createElement("div");
-    header.className = "artist-title";
-    header.innerText = artist;
-    store.appendChild(header);
-
-    tracks.forEach(({ title, id }) => {
-      const container = document.createElement("div");
-      container.className = "song-container";
-
-      const h2 = document.createElement("h3");
-      h2.innerText = `"${title}"`;
-      container.appendChild(h2);
-
-      const unlockBtn = document.createElement("button");
-      unlockBtn.innerText = "Unlock (30 coins)";
-      const replayBtn = document.createElement("button");
-      replayBtn.innerText = "Replay (10 coins)";
-      replayBtn.disabled = true;
-
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://www.youtube.com/embed/${id}`;
-      iframe.allow = "autoplay; encrypted-media";
-      iframe.allowFullscreen = true;
-      iframe.style.display = "none";
-
-      container.appendChild(unlockBtn);
-      container.appendChild(replayBtn);
-      container.appendChild(iframe);
-      store.appendChild(container);
-
-      const key = `${artist}-${title}`;
-      if (unlockedSongs[key]) {
-        iframe.style.display = "block";
-        unlockBtn.disabled = true;
-        replayBtn.disabled = false;
-      }
-
-      unlockBtn.onclick = () => {
-        if (getCoinCount() >= 30) {
-          spendCoins(30);
-          updateCoinDisplay();
-          iframe.style.display = "block";
-          unlockBtn.disabled = true;
-          replayBtn.disabled = false;
-          unlockedSongs[key] = true;
-          saveUnlockedSongs();
-        } else {
-          alert("Not enough coins to unlock.");
-        }
-      };
-
-      replayBtn.onclick = () => {
-        if (!unlockedSongs[key]) return;
-        if (getCoinCount() >= 10) {
-          spendCoins(10);
-          updateCoinDisplay();
-          iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-        } else {
-          alert("Not enough coins to replay.");
-        }
-      };
-    });
-  });
-</script>
-
-  <script>
     const store = document.getElementById("store");
 
     function updateCoinDisplay() {
@@ -177,56 +96,7 @@
           { title: "Cruel Summer", id: "ic8j13piAhQ" }
         ]
       },
-      {
-        artist: "Lady Gaga",
-        tracks: [
-          { title: "Bad Romance", id: "qrO4YZeyl0I" },
-          { title: "Poker Face", id: "bESGLojNYSo" },
-          { title: "Born This Way", id: "wV1FrqwZyKw" },
-          { title: "Rain On Me", id: "AoAm4om0wTs" },
-          { title: "Shallow (with Bradley Cooper)", id: "bo_efYhYU2A" }
-        ]
-      },
-      {
-        artist: "Dua Lipa",
-        tracks: [
-          { title: "Levitating", id: "TUVcZfQe-Kw" },
-          { title: "Don't Start Now", id: "oygrmJFKYZY" },
-          { title: "New Rules", id: "k2qgadSvNyU" },
-          { title: "Physical", id: "9HDEHj2yzew" },
-          { title: "One Kiss (with Calvin Harris)", id: "DkeiKbqa02g" }
-        ]
-      },
-      {
-        artist: "Olivia Rodrigo",
-        tracks: [
-          { title: "drivers license", id: "ZmDBbnmKpqQ" },
-          { title: "good 4 u", id: "gNi_6U5Pm_o" },
-          { title: "vampire", id: "2d4Hp7jZ9x8" },
-          { title: "deja vu", id: "cii6ruuycQA" },
-          { title: "traitor", id: "nWHUjuJ8zxE" }
-        ]
-      },
-      {
-        artist: "Ariana Grande",
-        tracks: [
-          { title: "7 rings", id: "QYh6mYIJG2Y" },
-          { title: "thank u, next", id: "gl1aHhXnN1k" },
-          { title: "Into You", id: "1ekZEVeXwek" },
-          { title: "No Tears Left To Cry", id: "ffxKSjUwKdU" },
-          { title: "Positions", id: "tcYodQoapMg" }
-        ]
-      },
-      {
-        artist: "Katy Perry",
-        tracks: [
-          { title: "Roar", id: "CevxZvSJLk8" },
-          { title: "Dark Horse", id: "0KSOMA3QBU0" },
-          { title: "Firework", id: "QGJuMBdaqIw" },
-          { title: "Teenage Dream", id: "98WtmW-lfeE" },
-          { title: "Last Friday Night", id: "KlyXNRrsk4A" }
-        ]
-      }
+      // … other artists here
     ];
 
     function saveUnlockedSongs() {
@@ -249,7 +119,6 @@
 
         const unlockBtn = document.createElement("button");
         unlockBtn.innerText = "Unlock (30 coins)";
-
         const replayBtn = document.createElement("button");
         replayBtn.innerText = "Replay (10 coins)";
         replayBtn.disabled = true;
@@ -266,7 +135,6 @@
         store.appendChild(container);
 
         const key = `${artist}-${title}`;
-
         if (unlockedSongs[key]) {
           iframe.style.display = "block";
           unlockBtn.disabled = true;
