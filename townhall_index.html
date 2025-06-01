@@ -52,7 +52,7 @@
   <h1>Townhall</h1>
   <button id="unlockBtn" class="locked" disabled>🔒 Unlock Next Land</button>
   <button class="back" onclick="goBack()">⬅️ Back to Map</button>
-
+<video id="unlock-video" width="100%" style="display:none;" autoplay></video>
   <script>
     const currentLand = localStorage.getItem('currentLand') || 'land1';
     const labComplete = localStorage.getItem(`labComplete_${currentLand}`) === 'true';
@@ -64,13 +64,24 @@
       unlockBtn.classList.add('unlocked');
       unlockBtn.disabled = false;
 
-      unlockBtn.onclick = () => {
-        const nextLandNum = parseInt(currentLand.replace('land', '')) + 1;
-        const nextLand = `land${nextLandNum}`;
-        localStorage.setItem('currentLand', nextLand);
-        localStorage.setItem('currentDifficulty', nextLandNum.toString());
-        window.location.href = `map_${nextLand}.html`;
-      };
+     unlockBtn.onclick = () => {
+  const nextLandNum = parseInt(currentLand.replace('land', '')) + 1;
+  const nextLand = `land${nextLandNum}`;
+  const videoFile = `animation_${nextLand}.mp4`;
+
+  const video = document.getElementById('unlock-video');
+  video.src = videoFile;
+  video.style.display = 'block';
+  unlockBtn.style.display = 'none'; // Optional: hide button during video
+
+  video.onended = () => {
+    localStorage.setItem('currentLand', nextLand);
+    localStorage.setItem('currentDifficulty', nextLandNum.toString());
+    window.location.href = nextIndexPage;
+  };
+
+  video.play();
+};
     }
 
     function goBack() {
