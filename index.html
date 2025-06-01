@@ -156,15 +156,17 @@
         grade !== "" && avatar !== null ? "inline-block" : "none";
     }
 
-    function startGame() {
-      const grade = parseInt(document.getElementById("grade-select").value);
-      setAvatar(avatar.animal, avatar.color);
-      setGrade(grade);
-      localStorage.setItem('grade-select', grade);
-      unlockLand(1);
-      setCoins(0);
-      window.location.href = "map_index.html";
-    }
+   function startGame() {
+  const grade = parseInt(document.getElementById("grade-select").value);
+  setAvatar(avatar.animal, avatar.color);
+  setGrade(grade);
+  localStorage.setItem('grade-select', grade);
+  unlockLand(1);
+  setCoins(0);
+
+  // 👉 Go to animation video page
+  window.location.href = "animation_land1.html";
+}
   </script>
 
 </body>
