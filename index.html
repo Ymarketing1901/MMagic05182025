@@ -4,82 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Math Magic</title>
- <style>
-  body {
-    font-family: sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background: url('math_magic_main.jpg') no-repeat center center fixed;
-    background-size: cover;
-    height: 100vh;
-  }
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: url('math_magic_main.jpg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-  #mainUI {
-    padding: 40px;
-    margin: 60px auto;
-    width: 90%;
-    max-width: 700px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    color: #000;
-  }
+    /* Fullscreen video */
+    #introVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 10;
+      transition: opacity 1s ease-out;
+    }
 
-  h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-  }
+    /* Main UI (initially hidden) */
+    #mainUI {
+      display: none;
+      opacity: 0;
+      padding: 40px;
+      margin: 60px auto;
+      width: 90%;
+      max-width: 700px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      color: #000;
+      z-index: 1;
+      position: relative;
+      animation: fadeIn 1s ease-out forwards;
+    }
 
-  .avatar-selection {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-  }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
-  .avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 12px;
-    cursor: pointer;
-    border: 4px solid transparent;
-    transition: border-color 0.3s, transform 0.3s;
-  }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
 
-  .avatar:hover {
-    transform: scale(1.05);
-  }
+    .avatar-selection {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
 
-  .avatar.selected {
-    border-color: #ff69b4;
-  }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 4px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+    }
 
-  select, button {
-    font-size: 18px;
-    padding: 10px 15px;
-    margin-top: 20px;
-    border-radius: 8px;
-    border: none;
-  }
+    .avatar:hover {
+      transform: scale(1.05);
+    }
 
-  #start-btn {
-    display: none;
-  }
-</style>
+    .avatar.selected {
+      border-color: #ff69b4;
+    }
+
+    select, button {
+      font-size: 18px;
+      padding: 10px 15px;
+      margin-top: 20px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #start-btn {
+      display: none;
+    }
+  </style>
   <script src="saveEngine.js"></script>
 </head>
 <body>
 
-  <!-- Intro Animation -->
-  <video id="introVideo" autoplay muted>
+  <!-- Fullscreen Intro Video -->
+  <video id="introVideo" autoplay muted playsinline>
     <source src="animation_math_magic_main.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Main UI hidden until animation ends -->
+  <!-- Main Welcome UI (initially hidden) -->
   <div id="mainUI">
     <h1>Welcome to Math Magic</h1>
 
@@ -110,8 +134,11 @@
     const ui = document.getElementById("mainUI");
 
     video.onended = () => {
-      video.style.display = "none";
-      ui.style.display = "block";
+      video.style.opacity = 0;
+      setTimeout(() => {
+        video.remove(); // fully remove video
+        ui.style.display = "block";
+      }, 1000); // match fade duration
     };
 
     let avatar = null;
@@ -139,5 +166,6 @@
       window.location.href = "map_index.html";
     }
   </script>
+
 </body>
 </html>
