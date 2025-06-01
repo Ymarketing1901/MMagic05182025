@@ -50,44 +50,51 @@
 </head>
 <body>
   <h1>Townhall</h1>
-  <button id="unlockBtn" class="locked" disabled>🔒 Unlock Next Land</button>
-  <button class="back" onclick="goBack()">⬅️ Back to Map</button>
+<div id="message-box"></div>
+<button id="unlockBtn" class="locked" disabled>🔒 Unlock Next Land</button>
+<button class="back" onclick="goBack()">⬅️ Back to Map</button>
 <video id="unlock-video" width="100%" style="display:none;" autoplay></video>
-  <script>
-    const currentLand = localStorage.getItem('currentLand') || 'land1';
-    const labComplete = localStorage.getItem(`labComplete_${currentLand}`) === 'true';
-    const unlockBtn = document.getElementById('unlockBtn');
+<script>
+  const currentLand = localStorage.getItem('currentLand') || 'land1';
+  const labComplete = localStorage.getItem(`labComplete_${currentLand}`) === 'true';
 
-    if (labComplete) {
-      unlockBtn.textContent = '🔓 Unlock Next Land';
-      unlockBtn.classList.remove('locked');
-      unlockBtn.classList.add('unlocked');
-      unlockBtn.disabled = false;
+  const unlockBtn = document.getElementById('unlockBtn');
+  const messageBox = document.getElementById('message-box');
+
+  if (labComplete) {
+    messageBox.textContent = "";
+    unlockBtn.textContent = '🔓 Unlock Next Land';
+    unlockBtn.classList.remove('locked');
+    unlockBtn.classList.add('unlocked');
+    unlockBtn.disabled = false;
 
     unlockBtn.onclick = () => {
-  const nextLandNum = parseInt(currentLand.replace('land', '')) + 1;
-  const nextLand = `land${nextLandNum}`;
-  const nextIndexPage = `index_${nextLandNum}.html`;
-  const videoFile = `animation_${nextLand}.mp4`;
+      const nextLandNum = parseInt(currentLand.replace('land', '')) + 1;
+      const nextLand = `land${nextLandNum}`;
+      const nextIndexPage = `index_${nextLandNum}.html`;
+      const videoFile = `animation_${nextLand}.mp4`;
 
-  const video = document.getElementById('unlock-video');
-  video.src = videoFile;
-  video.style.display = 'block';
-  unlockBtn.style.display = 'none';
+      const video = document.getElementById('unlock-video');
+      video.src = videoFile;
+      video.style.display = 'block';
+      unlockBtn.style.display = 'none';
 
-  video.onended = () => {
-    localStorage.setItem('currentLand', nextLand);
-    localStorage.setItem('currentDifficulty', nextLandNum.toString());
-    window.location.href = nextIndexPage;
-  };
+      video.onended = () => {
+        localStorage.setItem('currentLand', nextLand);
+        localStorage.setItem('currentDifficulty', nextLandNum.toString());
+        window.location.href = nextIndexPage;
+      };
 
-  video.play();
-};
-    }
+      video.play();
+    };
+  } else {
+    unlockBtn.style.display = 'none';
+    messageBox.textContent = "Go back to the science lab and complete all the equations to access the next land.";
+  }
 
-    function goBack() {
-      window.location.href = `map_${currentLand}.html`;
-    }
-  </script>
+  function goBack() {
+    window.location.href = `map_${currentLand}.html`;
+  }
+</script>
 </body>
 </html>
