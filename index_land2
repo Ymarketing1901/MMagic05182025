@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World 2 Level</title>
+  <style>
+    body {
+      margin: 0;
+      background: #eaf6dc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .map-container {
+      position: relative;
+    }
+    .map-container img {
+      width: 100vw;
+      height: auto;
+      max-width: 600px;
+    }
+    .zone {
+      position: absolute;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .zone:hover {
+      border-color: rgba(255, 255, 0, 0.4);
+    }
+    #home { top: 90px; left: 50px; width: 110px; height: 100px; }
+    #townhall { top: 80px; right: 40px; width: 110px; height: 100px; }
+    #workshop { top: 210px; left: 50px; width: 110px; height: 100px; }
+    #science { top: 200px; right: 40px; width: 110px; height: 100px; }
+    #hospital { top: 330px; left: 50px; width: 110px; height: 100px; }
+    #musicstore { top: 330px; right: 40px; width: 110px; height: 100px; }
+  </style>
+</head>
+<body>
+  <div class="map-container">
+    <img src="world2.png" alt="World 2 Map" />
+    <div class="zone" id="home" onclick="window.location.href='player_home_index.html' "></div>
+    <div class="zone" id="townhall" onclick="window.location.href='townhall_index.html'"></div>
+    <div class="zone" id="workshop" onclick="window.location.href='workshop_index.html'"></div>
+    <div class="zone" id="science" onclick="window.location.href='lab_index.html'"></div>
+    <div class="zone" id="hospital" onclick="window.location.href='hospital_index.html'"></div>
+    <div class="zone" id="musicstore" onclick="window.location.href='music_store.html'"></div>
+  </div>
+
+  <script>
+    // Set current land and difficulty for World 2
+    localStorage.setItem("currentLand", "land2");
+    localStorage.setItem("currentDifficulty", "2");
+
+    function enter(location) {
+      alert("Entering " + location + "...");
+    }
+  </script>
+</body>
+</html>
