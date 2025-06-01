@@ -64,15 +64,16 @@
       unlockBtn.classList.add('unlocked');
       unlockBtn.disabled = false;
 
-     unlockBtn.onclick = () => {
+    unlockBtn.onclick = () => {
   const nextLandNum = parseInt(currentLand.replace('land', '')) + 1;
   const nextLand = `land${nextLandNum}`;
+  const nextIndexPage = `index_${nextLandNum}.html`;
   const videoFile = `animation_${nextLand}.mp4`;
 
   const video = document.getElementById('unlock-video');
   video.src = videoFile;
   video.style.display = 'block';
-  unlockBtn.style.display = 'none'; // Optional: hide button during video
+  unlockBtn.style.display = 'none';
 
   video.onended = () => {
     localStorage.setItem('currentLand', nextLand);
