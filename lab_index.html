@@ -284,18 +284,23 @@
     }
     window.nextQuestion = nextQuestion;
 
-    function showCompletion() {
-      const modal = document.getElementById("completion-modal");
-      modal.innerHTML = `
-        <h2>🎉 Congratulations!</h2>
-        <p>You have completed the Science Lab!</p>
-        <div id="completion-stars">${getStars(correctAnswers)}</div>
-        <p>You answered ${correctAnswers} questions correctly.</p>
-        <button onclick="window.location.href='townhall_index.html'">To Townhall</button>
-      `;
-      modal.style.display = "block";
-      localStorage.setItem(`labScore_${land}`, correctAnswers);
-    }
+   function showCompletion() {
+  const modal = document.getElementById("completion-modal");
+  modal.innerHTML = `
+    <h2>🎉 Congratulations!</h2>
+    <p>You have completed the Science Lab!</p>
+    <div id="completion-stars">${getStars(correctAnswers)}</div>
+    <p>You answered ${correctAnswers} questions correctly.</p>
+    <button onclick="window.location.href='townhall_index.html'">To Townhall</button>
+  `;
+  modal.style.display = "block";
+
+  // ✅ Save completion flag for current land
+  localStorage.setItem(`labComplete_${land}`, 'true');
+
+  // ✅ Save score separately
+  localStorage.setItem(`labScore_${land}`, correctAnswers);
+}
 
     function getStars(score) {
       if (score < 10) return "⭐";
