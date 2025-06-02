@@ -18,7 +18,7 @@
     .map-container img {
       width: 100vw;
       height: auto;
-      max-width: 600px;
+      max-width: 1000px;
     }
     .zone {
       position: absolute;
@@ -28,33 +28,36 @@
     .zone:hover {
       border-color: rgba(255, 255, 0, 0.4);
     }
-    #home { top: 90px; left: 50px; width: 110px; height: 100px; }
-    #townhall { top: 80px; right: 40px; width: 110px; height: 100px; }
-    #workshop { top: 210px; left: 50px; width: 110px; height: 100px; }
-    #science { top: 200px; right: 40px; width: 110px; height: 100px; }
-    #hospital { top: 330px; left: 50px; width: 110px; height: 100px; }
-    #musicstore { top: 330px; right: 40px; width: 110px; height: 100px; }
+
+    /* Zones based on visual analysis */
+    #hospital     { top: 980px;  left: 100px; width: 180px; height: 180px; }
+    #science      { top: 860px;  left: 360px; width: 220px; height: 220px; }
+    #musicstore   { top: 540px;  left: 100px; width: 180px; height: 200px; }
+    #home         { top: 1020px; left: 740px; width: 180px; height: 200px; }
+    #townhall     { top: 420px;  left: 480px; width: 220px; height: 220px; }
+    #laughfactory { top: 540px;  left: 720px; width: 200px; height: 240px; }
+    #eiffel       { top: 40px;   left: 120px; width: 100px; height: 220px; }
+    #arc          { top: 180px;  left: 780px; width: 160px; height: 160px; }
   </style>
 </head>
 <body>
   <div class="map-container">
     <img src="land5.png" alt="World 5 Map" />
-    <div class="zone" id="home" onclick="window.location.href='player_home_index.html' "></div>
-    <div class="zone" id="townhall" onclick="window.location.href='townhall_index.html'"></div>
-    <div class="zone" id="workshop" onclick="window.location.href='workshop_index.html'"></div>
-    <div class="zone" id="science" onclick="window.location.href='lab_index.html'"></div>
-    <div class="zone" id="hospital" onclick="window.location.href='hospital_index.html'"></div>
-    <div class="zone" id="musicstore" onclick="window.location.href='music_store.html'"></div>
+
+    <div class="zone" id="hospital"     onclick="window.location.href='hospital_index.html'"></div>
+    <div class="zone" id="science"      onclick="window.location.href='lab_index.html'"></div>
+    <div class="zone" id="musicstore"   onclick="window.location.href='music_store.html'"></div>
+    <div class="zone" id="home"         onclick="window.location.href='player_home_index.html'"></div>
+    <div class="zone" id="townhall"     onclick="window.location.href='townhall_index.html'"></div>
+    <div class="zone" id="laughfactory" onclick="window.location.href='haha_index.html'"></div>
+    <div class="zone" id="eiffel"       onclick="window.location.href='eiffel_index.html'"></div>
+    <div class="zone" id="arc"          onclick="window.location.href='arc_index.html'"></div>
   </div>
 
   <script>
     // Set current land and difficulty for World 5
     localStorage.setItem("currentLand", "land5");
     localStorage.setItem("currentDifficulty", "5");
-
-    function enter(location) {
-      alert("Entering " + location + "...");
-    }
   </script>
 </body>
 </html>
