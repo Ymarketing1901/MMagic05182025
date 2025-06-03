@@ -1,326 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Science Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laugh Factory</title>
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      font-family: sans-serif;
-      background: url('Lab.png') no-repeat center center fixed;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      background: url('ahah.png') no-repeat center center fixed;
       background-size: cover;
-      color: white;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 2vh;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      font-size: 5vw;
-      margin: 0.5em 0;
-    }
-
-    #coin-box, #progress {
-      font-size: 1.2em;
-      background: rgba(255, 255, 255, 0.85);
-      color: black;
-      padding: 6px 12px;
-      border-radius: 10px;
-      margin: 5px;
-    }
-
-    #question-box {
-      font-size: 1.8em;
-      align: center;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.85);
-      color: black;
-      width: 90vw;
-      max-width: 500px;
-      border-radius: 12px;
-      margin-top: 15px;
-    }
-
-    #input-display {
-      font-size: 1.5em;
-      padding: 10px;
-      width: 100px;
-      min-height: 1.5em;
-      margin: 10px 0;
-      text-align: center;
-      border-radius: 10px;
-      border: 2px solid #ccc;
-      background-color: white;
-      color: black;
-    }
-
-    .numpad {
-      display: grid;
-      grid-template-columns: repeat(3, 60px);
-      gap: 10px;
       justify-content: center;
-      margin-top: 10px;
-    }
+      height: 100vh;
+      color: #fff;
+      text-shadow: 2px 2px #000;
+    }h1 {
+  margin-top: 40px;
+  font-size: 3em;
+}
 
-    .numpad button, #next-btn {
-      font-size: 1.3em;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      background: linear-gradient(to right, #a8ff78, #78ffd6);
-      color: black;
-      font-weight: bold;
-      box-shadow: 2px 2px 0 #000;
-      cursor: pointer;
-    }
+.joke-box {
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 600px;
+  margin: 20px;
+}
 
-    #next-btn-container {
-      margin-top: 10px;
-      display: none;
-    }
+.joke-button, .answer-button {
+  background-color: #ffcc00;
+  border: none;
+  color: black;
+  padding: 12px 25px;
+  margin: 10px;
+  font-size: 1.2em;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-    #gauge {
-      width: 150px;
-      height: 18px;
-      background: linear-gradient(to right, red 0%, orange 50%, green 100%);
-      border-radius: 10px;
-      margin-top: 10px;
-      position: relative;
-    }
+.joke-button:hover, .answer-button:hover {
+  background-color: #ffaa00;
+}
 
-    #timer-bar {
-      height: 100%;
-      background-color: rgba(0,0,0,0.2);
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+#back-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: url('back_map5.png') no-repeat center center;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+}
 
-    #feedback {
-      font-size: 1.2em;
-      margin-top: 10px;
-    }
+#coin-count {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+}
 
-    #intro-modal, #completion-modal {
-      position: fixed;
-      top: 10%;
-      left: 10%;
-      width: 80%;
-      background: white;
-      color: black;
-      padding: 20px;
-      border: 5px solid black;
-      border-radius: 20px;
-      text-align: center;
-      z-index: 1000;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      box-shadow: 8px 8px 0 #000;
-    }
-
-    #completion-stars {
-      font-size: 2em;
-      margin: 10px 0;
-    }
-
-    #map-icon {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 40px;
-      height: 40px;
-      background: url('map-icon.png') no-repeat center center;
-      background-size: cover;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
-  <h1>Science Lab</h1>
-  <div id="intro-modal">
-    <p>You have made it to the science lab!<br><br>Get up to 5 coins per correct answer.</p>
-    <button onclick="document.getElementById('intro-modal').style.display='none'">Let's go</button>
-  </div>
-
-  <div id="coin-box">Coins: 0</div>
-  <div id="progress">Questions Solved: 0 / 50</div>
-  <div id="question-box">Loading...</div>
-  <div id="input-display"> </div>
-  <div class="numpad">
-    <button onclick="appendDigit('1')">1</button>
-    <button onclick="appendDigit('2')">2</button>
-    <button onclick="appendDigit('3')">3</button>
-    <button onclick="appendDigit('4')">4</button>
-    <button onclick="appendDigit('5')">5</button>
-    <button onclick="appendDigit('6')">6</button>
-    <button onclick="appendDigit('7')">7</button>
-    <button onclick="appendDigit('8')">8</button>
-    <button onclick="appendDigit('9')">9</button>
-    <button onclick="clearInput()">⌫</button>
-    <button onclick="appendDigit('0')">0</button>
-    <button onclick="submitAnswer()">✔️</button>
-  </div>
-
-  <div id="gauge"><div id="timer-bar"></div></div>
-  <div id="feedback"></div>
-  <div id="next-btn-container"><button id="next-btn" onclick="nextQuestion()">Next ➡️</button></div>
-  <div id="completion-modal" style="display:none;"></div>
-  <a id="map-icon" href="map_map.html" title="Back to map"></a>
+  <div id="coin-count">Coins: 0</div>
+  <div class="joke-box">
+    <div id="jokePrompt">Press the button for a joke!</div>
+    <div id="jokePunchline" style="display:none; margin-top: 10px;"></div>
+    <button class="joke-button" onclick="getJoke()">Tell me a joke (2 coins)</button>
+    <button class="answer-button" onclick="showAnswer()" style="display:none;">Show Answer</button>
+  </div><button id="back-button" onclick="window.location.href='map_map5.html'"></button>
 
   <script type="module">
-    import { generateEquation } from './equationQuery.js';
-    import { addCoins, getCoinCount } from './coinEngine.js';
+    import { spendCoins, getCoinCount } from './coinEngine.js';
 
-    const grade = parseInt(localStorage.getItem('grade-select') || "1");
-    const difficulty = parseInt(localStorage.getItem('currentDifficulty') || "1");
-    const land = localStorage.getItem('currentLand') || 'land1';
-
-    let correctAnswers = 0;
-    let questionCount = 0;
-    let userAnswer = "";
-    let timerInterval = null;
+    const jokes = [
+      { prompt: "Why did the cow become an astronaut?", punchline: "Because it wanted to see the moooon!" },
+      { prompt: "What do you call a sleeping bull?", punchline: "A bulldozer!" },
+      { prompt: "Why did the cat sit on the computer?", punchline: "It wanted to keep an eye on the mouse." },
+      { prompt: "What do you call a dog magician?", punchline: "A labracadabrador!" },
+      { prompt: "What do frogs like to drink?", punchline: "Croak-a-cola!" },
+      { prompt: "Why don't elephants use computers?", punchline: "They're afraid of the mouse." },
+      { prompt: "How do you count cows?", punchline: "With a cowculator!" },
+      { prompt: "Why did the duck cross the playground?", punchline: "To get to the other slide!" },
+      { prompt: "What's a snake’s favorite subject?", punchline: "Hiss-tory!" },
+      { prompt: "What kind of math do owls love?", punchline: "Owlgebra!" },
+      { prompt: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+      { prompt: "Why did the horse go behind the tree?", punchline: "To change his jockeys!" },
+      { prompt: "What’s a cat’s favorite color?", punchline: "Purr-ple!" },
+      { prompt: "Why do fish live in saltwater?", punchline: "Because pepper makes them sneeze!" },
+      { prompt: "What do you get when you cross a sheep and a kangaroo?", punchline: "A woolly jumper!" },
+      { prompt: "Why did the giraffe get bad grades?", punchline: "His head was always in the clouds." },
+      { prompt: "What do you call a pig who knows karate?", punchline: "Pork chop!" },
+      { prompt: "Why was the crab so bad at sharing?", punchline: "Because he was a little shellfish!" },
+      { prompt: "What do you call an alligator in a vest?", punchline: "An investi-gator!" },
+      { prompt: "Why can’t you play cards in the jungle?", punchline: "Too many cheetahs!" },
+      { prompt: "Why did the turtle cross the road?", punchline: "To get to the Shell station." },
+      { prompt: "What sound do porcupines make when they kiss?", punchline: "Ouch!" },
+      { prompt: "Why are frogs so happy?", punchline: "Because they eat whatever bugs them." },
+      { prompt: "What do you call a dancing sheep?", punchline: "A baa-lerina!" },
+      { prompt: "What’s a rabbit’s favorite music?", punchline: "Hip-hop!" },
+      { prompt: "How does a lion like his meat?", punchline: "Roar!" },
+      { prompt: "What did the cat say when he lost all his money?", punchline: "I’m paw!" },
+      { prompt: "What do you call a fish that wears a bowtie?", punchline: "Sofishticated." },
+      { prompt: "Why did the chicken join a band?", punchline: "Because it had the drumsticks!" },
+      { prompt: "What do you get when you cross a snake and a pie?", punchline: "A python!" },
+      { prompt: "Why did the ant bring a suitcase to school?", punchline: "Because it was going on a field trip." },
+      { prompt: "Why do bees have sticky hair?", punchline: "Because they use honeycombs!" },
+      { prompt: "What’s a bat’s favorite game?", punchline: "Bat-minton!" },
+      { prompt: "Why did the fox bring toilet paper to the party?", punchline: "He was a party pooper." },
+      { prompt: "Why are dogs bad at math?", punchline: "They can't stop barking up the wrong tree." },
+      { prompt: "What do you get when you cross a dog and a calculator?", punchline: "A friend you can count on." },
+      { prompt: "Why are turtles never stressed?", punchline: "Because they just shellax." },
+      { prompt: "What do cows read at bedtime?", punchline: "Dairy tales." },
+      { prompt: "Why don’t pandas like fast food?", punchline: "Because they can’t catch it!" },
+      { prompt: "What’s a horse’s favorite sport?", punchline: "Stable tennis!" },
+      { prompt: "What did the lion say after finishing his meal?", punchline: "I’m stuffed!" },
+      { prompt: "Why did the parrot get a timeout?", punchline: "It kept repeating everything!" },
+      { prompt: "Why did the whale blush?", punchline: "Because it saw the ocean’s bottom!" },
+      { prompt: "Why was the dog a great musician?", punchline: "He had perfect pooch!" },
+      { prompt: "What do you get when you cross an elephant with a fish?", punchline: "Swimming trunks!" },
+      { prompt: "What did the duck say after buying lipstick?", punchline: "Put it on my bill." },
+      { prompt: "Why did the sheep go to the beach?", punchline: "To get a little baa-tan!" },
+      { prompt: "What do you call a cow that plays the guitar?", punchline: "A moo-sician!" },
+      { prompt: "Why can’t cats play poker?", punchline: "Too many cheetahs." },
+      { prompt: "Why did the bird go to school?", punchline: "To improve his tweet-eracy!" },
+      { prompt: "Why do kangaroos hate rainy days?", punchline: "Because the kids have to play inside the pouch." },
+      { prompt: "What do you get when you cross a pig and a centipede?", punchline: "Bacon and legs!" },
+      { prompt: "Why was the bee’s report card sticky?", punchline: "It was covered in honey!" },
+      { prompt: "Why are snails so bad at races?", punchline: "Because they’re shell-shocked." },
+      { prompt: "What do you call a deer with no eyes?", punchline: "No eye-deer." },
+      { prompt: "Why did the goat go to art school?", punchline: "He wanted to learn how to draw horns." },
+      { prompt: "What kind of dog loves to take bubble baths?", punchline: "A shampoodle." },
+      { prompt: "Why did the skunk apply for a job?", punchline: "He was scent unemployed." },
+      { prompt: "What do birds give out on Halloween?", punchline: "Tweets." },
+      { prompt: "What’s a crocodile’s favorite party game?", punchline: "Snap!" },
+      { prompt: "Why did the cow get promoted?", punchline: "He was outstanding in his field." },
+      { prompt: "What did the mouse say to the keyboard?", punchline: "You’re just my type." },
+      { prompt: "Why don’t cats play baseball?", punchline: "They can’t stop chasing the bat." },
+      { prompt: "Why did the owl get hired?", punchline: "Because he was a real hoot at interviews." },
+      { prompt: "What kind of fish is always on time?", punchline: "A clockfish." },
+      { prompt: "Why are flamingos so good at stand-up?", punchline: "They already have great legs." },
+      { prompt: "What do you call a cat who loves math?", punchline: "A calcu-purr." },
+      { prompt: "Why did the monkey bring a ladder?", punchline: "To reach the top banana." },
+      { prompt: "Why did the hamster cross the road?", punchline: "Because his wheel broke!" },
+      { prompt: "Why don’t lobsters ever share?", punchline: "Because they’re shellfish." },
+      { prompt: "What do you call a nervous horse?", punchline: "A jitterbug." },
+      { prompt: "What did the dolphin say to the annoying whale?", punchline: "You blow things out of proportion!" },
+      { prompt: "Why did the snake fail his test?", punchline: "He had hiss-terical answers." },
+      { prompt: "What’s a wolf’s favorite holiday?", punchline: "Howl-o-ween!" },
+      { prompt: "What did the buffalo say to his son when he left for school?", punchline: "Bison." },
+      { prompt: "Why did the spider become a web designer?", punchline: "It had an eye for threads." },
+      { prompt: "What kind of dog can tell time?", punchline: "A watch-dog." },
+      { prompt: "What do you call a kangaroo who tells jokes?", punchline: "A pun-roo." },
+      { prompt: "Why did the sloth cancel his date?", punchline: "He didn’t want to rush into things." },
+      { prompt: "What’s a zebra’s favorite pattern?", punchline: "Stripey!" },
+      { prompt: "Why do cows wear bells?", punchline: "Because their horns don’t work." },
+      { prompt: "What do you call an octopus that sings?", punchline: "A rocktopus." },
+      { prompt: "What do you call a leopard that plays hide and seek?", punchline: "Spotless." },
+      { prompt: "Why don’t pigs use cellphones?", punchline: "They always hog the line." },
+      { prompt: "What’s a sheep’s favorite game?", punchline: "Baa-dminton." },
+      { prompt: "What do you call a bird that’s afraid to fly?", punchline: "A chicken." },
+      { prompt: "Why did the rooster win an award?", punchline: "He was egg-ceptional!" },
+      { prompt: "What kind of cat loves water?", punchline: "An octo-puss." },
+      { prompt: "Why did the duck go to math class?", punchline: "He wanted to learn quackulations!" },
+      { prompt: "Why was the cheetah always late?", punchline: "He was fast asleep." },
+      { prompt: "What do you call a lion that tells jokes?", punchline: "A comedi-roar." },
+      { prompt: "Why don’t giraffes do gymnastics?", punchline: "Too much neck risk." },
+      { prompt: "What did the dog say when he sat on sandpaper?", punchline: "Ruff!" },
+      { prompt: "What do owls say when they’re surprised?", punchline: "Owl be darned!" },
+      { prompt: "Why do penguins always carry fish?", punchline: "For ice-breakers." },
+      { prompt: "What do you get when you cross a squirrel and a computer?", punchline: "A nutwork!" },
+      { prompt: "What did one flea say to the other?", punchline: "Should we walk or take a dog?" },
+      { prompt: "Why are ducks good at time management?", punchline: "They don’t quack under pressure." },
+      { prompt: "What do you get when you cross a rabbit with an insect?", punchline: "Bugs Bunny!" },
+      { prompt: "Why did the bear bring a backpack?", punchline: "For his bear necessities." }
+    ];
 
     function updateCoinDisplay() {
-      document.getElementById('coin-box').innerText = "Coins: " + getCoinCount();
+      document.getElementById("coin-count").innerText = "Coins: " + getCoinCount();
     }
 
-    async function showQuestion() {
-      document.getElementById("next-btn-container").style.display = "none";
-      document.getElementById("timer-bar").style.transition = "none";
-      document.getElementById("timer-bar").style.width = "100%";
-
-      if (correctAnswers >= 50) return;
-
-      const { equation, correctAnswer } = await generateEquation(grade, difficulty, 'lab');
-
-      userAnswer = "";
-      updateDisplay();
-
-      document.getElementById('question-box').innerText = equation;
-      document.getElementById('feedback').textContent = "";
-      window.currentCorrectAnswer = correctAnswer;
-
-      setTimeout(() => {
-        document.getElementById("timer-bar").style.transition = "width 30s linear";
-        document.getElementById("timer-bar").style.width = "0%";
-      }, 50);
-
-      window.timerStart = Date.now();
-      timerInterval = setInterval(() => {
-        const elapsed = (Date.now() - window.timerStart) / 1000;
-        if (elapsed >= 30) {
-          clearInterval(timerInterval);
-          submitAnswer();
-        }
-      }, 100);
-    }
-
-    function appendDigit(d) {
-      userAnswer += d;
-      updateDisplay();
-    }
-    window.appendDigit = appendDigit;
-
-    function clearInput() {
-      userAnswer = userAnswer.slice(0, -1);
-      updateDisplay();
-    }
-    window.clearInput = clearInput;
-
-    function updateDisplay() {
-      document.getElementById("input-display").textContent = userAnswer === "" ? "\u00A0" : userAnswer;
-    }
-
-    function submitAnswer() {
-      clearInterval(timerInterval);
-  // 🛠 Stop CSS animation visually
-  const timerBar = document.getElementById("timer-bar");
-  timerBar.style.transition = "none";
-  timerBar.style.width = "0%";
-      const input = userAnswer.trim();
-      const timeTaken = (Date.now() - window.timerStart) / 1000;
-      let reward = 0;
-
-      const isCorrect = parseInt(input) === parseInt(window.currentCorrectAnswer);
-      if (isCorrect) {
-        if (timeTaken <= 10) reward = 5;
-        else if (timeTaken <= 20) reward = 3;
-        else if (timeTaken <= 30) reward = 2;
-        correctAnswers++;
-        addCoins(reward);
+    function getJoke() {
+      if (!spendCoins(2)) {
+        alert("You don't have enough coins!");
+        return;
       }
 
-      document.getElementById('feedback').textContent = isCorrect
-        ? `✅ Correct! +${reward} coins | Answer: ${window.currentCorrectAnswer}`
-        : `❌ The correct answer was ${window.currentCorrectAnswer} | +0 coins`;
-
+      const index = Math.floor(Math.random() * jokes.length);
+      document.getElementById("jokePrompt").innerText = jokes[index].prompt;
+      document.getElementById("jokePunchline").innerText = jokes[index].punchline;
+      document.getElementById("jokePunchline").style.display = "none";
+      document.querySelector(".answer-button").style.display = "inline-block";
       updateCoinDisplay();
-      questionCount++;
-      document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / ${questionCount}`;
-
-      // ✅ Save progress after each answer
-      localStorage.setItem(`labProgress_${land}`, JSON.stringify({
-        correctAnswers,
-        questionCount
-      }));
-
-      if (questionCount >= 50) showCompletion();
-      else document.getElementById("next-btn-container").style.display = "block";
-    }
-    window.submitAnswer = submitAnswer;
-
-    function nextQuestion() {
-      showQuestion();
-    }
-    window.nextQuestion = nextQuestion;
-
-   function showCompletion() {
-  const modal = document.getElementById("completion-modal");
-  modal.innerHTML = `
-    <h2>🎉 Congratulations!</h2>
-    <p>You have completed the Science Lab!</p>
-    <div id="completion-stars">${getStars(correctAnswers)}</div>
-    <p>You answered ${correctAnswers} questions correctly.</p>
-    <button onclick="window.location.href='townhall_index.html'">To Townhall</button>
-  `;
-  modal.style.display = "block";
-
-  // ✅ Save completion flag for current land
-  localStorage.setItem(`labComplete_${land}`, 'true');
-
-  // ✅ Save score separately
-  localStorage.setItem(`labScore_${land}`, correctAnswers);
-}
-
-    function getStars(score) {
-      if (score < 10) return "⭐";
-      if (score <= 20) return "⭐⭐";
-      if (score <= 35) return "⭐⭐⭐";
-      if (score <= 45) return "⭐⭐⭐⭐";
-      return "⭐⭐⭐⭐⭐";
     }
 
+    function showAnswer() {
+      document.getElementById("jokePunchline").style.display = "block";
+      document.querySelector(".answer-button").style.display = "none";
+    }
+
+    window.getJoke = getJoke;
+    window.showAnswer = showAnswer;
     updateCoinDisplay();
-
-// ✅ Load previous progress if it exists
-const savedProgress = JSON.parse(localStorage.getItem(`labProgress_${land}`));
-if (savedProgress) {
-  correctAnswers = savedProgress.correctAnswers || 0;
-  questionCount = savedProgress.questionCount || 0;
-  document.getElementById("progress").innerText = `Questions Solved: ${correctAnswers} / ${questionCount}`;
-}
-
-showQuestion();
-  </script>
-</body>
-</html>
+  </script></body>
+</html> 
