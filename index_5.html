@@ -12,48 +12,49 @@
       background: #eaf6dc;
       height: 100vh;
       overflow: hidden;
-    }
-
-    .map-container {
-      position: relative;
-      height: 100vh;
-      width: auto;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
+    .map-container {
+      position: relative;
+      width: 100vw;
+      max-width: 1000px;
+      aspect-ratio: 1024 / 1536;
+    }
+
     .map-container img {
-      height: 100vh;
-      width: auto;
-      max-height: 100%;
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     .zone {
       position: absolute;
-      border: 2px solid transparent;
       cursor: pointer;
+      border: 2px solid transparent;
     }
 
     .zone:hover {
-      border-color: rgba(255, 255, 0, 0.3);
+      border-color: rgba(255, 255, 0, 0.4);
     }
 
-    /* These coordinates match the 1024x1536 image, so scale relative to it */
-    #hospital     { top: 980px;  left: 100px; width: 180px; height: 180px; }
-    #science      { top: 860px;  left: 360px; width: 220px; height: 220px; }
-    #musicstore   { top: 540px;  left: 100px; width: 180px; height: 200px; }
-    #home         { top: 1020px; left: 740px; width: 180px; height: 200px; }
-    #townhall     { top: 420px;  left: 480px; width: 220px; height: 220px; }
-    #laughfactory { top: 540px;  left: 720px; width: 200px; height: 240px; }
-    #eiffel       { top: 40px;   left: 120px; width: 100px; height: 220px; }
-    #arc          { top: 180px;  left: 780px; width: 160px; height: 160px; }
+    /* All values relative to image dimensions (percent of 1024 x 1536) */
+    #hospital     { top: 63.8%; left: 9.8%;  width: 17.6%; height: 11.7%; }
+    #science      { top: 56%;   left: 35.1%; width: 21.4%; height: 14.3%; }
+    #musicstore   { top: 35.1%; left: 9.8%;  width: 17.6%; height: 13%; }
+    #home         { top: 66.5%; left: 72.3%; width: 17.6%; height: 13%; }
+    #townhall     { top: 27.3%; left: 46.8%; width: 21.4%; height: 14.3%; }
+    #laughfactory { top: 35.1%; left: 70.3%; width: 19.5%; height: 15.6%; }
+    #eiffel       { top: 2.6%;  left: 11.7%; width: 9.8%;  height: 14.3%; }
+    #arc          { top: 11.7%; left: 76.1%; width: 15.6%; height: 10.4%; }
   </style>
 </head>
 <body>
   <div class="map-container">
     <img src="land5.png" alt="World 5 Map" />
-    
+
     <div class="zone" id="hospital"     onclick="location.href='hospital_index.html'"></div>
     <div class="zone" id="science"      onclick="location.href='lab_index.html'"></div>
     <div class="zone" id="musicstore"   onclick="location.href='music_store.html'"></div>
@@ -69,4 +70,4 @@
     localStorage.setItem("currentDifficulty", "5");
   </script>
 </body>
-</html>
+</html> 
