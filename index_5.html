@@ -10,48 +10,58 @@
       margin: 0;
       padding: 0;
       background: #eaf6dc;
+      height: 100vh;
       overflow: hidden;
     }
 
     .map-container {
       position: relative;
-      width: 100vw;
       height: 100vh;
-      background: url('land5.png') no-repeat center center;
-      background-size: contain;
+      width: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .map-container img {
+      height: 100vh;
+      width: auto;
+      max-height: 100%;
     }
 
     .zone {
       position: absolute;
-      cursor: pointer;
       border: 2px solid transparent;
+      cursor: pointer;
     }
 
     .zone:hover {
       border-color: rgba(255, 255, 0, 0.3);
     }
 
-    /* Button positions using vh/vw to stay proportional on different screens */
-    #hospital     { top: 63.8vh; left: 9.8vw; width: 17.6vw; height: 11.7vh; }
-    #science      { top: 56vh; left: 35.1vw; width: 21.4vw; height: 14.3vh; }
-    #musicstore   { top: 35.1vh; left: 9.8vw; width: 17.6vw; height: 13vh; }
-    #home         { top: 66.5vh; left: 72.3vw; width: 17.6vw; height: 13vh; }
-    #townhall     { top: 27.3vh; left: 46.8vw; width: 21.4vw; height: 14.3vh; }
-    #laughfactory { top: 35.1vh; left: 70.3vw; width: 19.5vw; height: 15.6vh; }
-    #eiffel       { top: 2.6vh; left: 11.7vw; width: 9.8vw; height: 14.3vh; }
-    #arc          { top: 11.7vh; left: 76.1vw; width: 15.6vw; height: 10.4vh; }
+    /* These coordinates match the 1024x1536 image, so scale relative to it */
+    #hospital     { top: 980px;  left: 100px; width: 180px; height: 180px; }
+    #science      { top: 860px;  left: 360px; width: 220px; height: 220px; }
+    #musicstore   { top: 540px;  left: 100px; width: 180px; height: 200px; }
+    #home         { top: 1020px; left: 740px; width: 180px; height: 200px; }
+    #townhall     { top: 420px;  left: 480px; width: 220px; height: 220px; }
+    #laughfactory { top: 540px;  left: 720px; width: 200px; height: 240px; }
+    #eiffel       { top: 40px;   left: 120px; width: 100px; height: 220px; }
+    #arc          { top: 180px;  left: 780px; width: 160px; height: 160px; }
   </style>
 </head>
 <body>
   <div class="map-container">
-    <div class="zone" id="hospital"     onclick="window.location.href='hospital_index.html'"></div>
-    <div class="zone" id="science"      onclick="window.location.href='lab_index.html'"></div>
-    <div class="zone" id="musicstore"   onclick="window.location.href='music_store.html'"></div>
-    <div class="zone" id="home"         onclick="window.location.href='player_home_index.html'"></div>
-    <div class="zone" id="townhall"     onclick="window.location.href='townhall_index.html'"></div>
-    <div class="zone" id="laughfactory" onclick="window.location.href='haha_index.html'"></div>
-    <div class="zone" id="eiffel"       onclick="window.location.href='eiffel_index.html'"></div>
-    <div class="zone" id="arc"          onclick="window.location.href='arc_index.html'"></div>
+    <img src="land5.png" alt="World 5 Map" />
+    
+    <div class="zone" id="hospital"     onclick="location.href='hospital_index.html'"></div>
+    <div class="zone" id="science"      onclick="location.href='lab_index.html'"></div>
+    <div class="zone" id="musicstore"   onclick="location.href='music_store.html'"></div>
+    <div class="zone" id="home"         onclick="location.href='player_home_index.html'"></div>
+    <div class="zone" id="townhall"     onclick="location.href='townhall_index.html'"></div>
+    <div class="zone" id="laughfactory" onclick="location.href='haha_index.html'"></div>
+    <div class="zone" id="eiffel"       onclick="location.href='eiffel_index.html'"></div>
+    <div class="zone" id="arc"          onclick="location.href='arc_index.html'"></div>
   </div>
 
   <script>
@@ -59,4 +69,4 @@
     localStorage.setItem("currentDifficulty", "5");
   </script>
 </body>
-</html> 
+</html>
