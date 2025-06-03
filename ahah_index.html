@@ -60,10 +60,21 @@
   cursor: pointer;
 }
 
+#coin-count {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
-  <h1>Laugh Factory</h1>
+  <div id="coin-count">Coins: 0</div>
   <div class="joke-box">
     <div id="jokePrompt">Press the button for a joke!</div>
     <div id="jokePunchline" style="display:none; margin-top: 10px;"></div>
@@ -71,7 +82,9 @@
     <button class="answer-button" onclick="showAnswer()" style="display:none;">Show Answer</button>
   </div><button id="back-button" onclick="window.location.href='map_map5.html'"></button>
 
-  <script src="coinEngine.js"></script>  <script>
+  <script type="module">
+    import { spendCoins, getCoinCount } from './coinEngine.js';
+
     const jokes = [
       { prompt: "Why did the cow become an astronaut?", punchline: "Because it wanted to see the moooon!" },
       { prompt: "What do you call a sleeping bull?", punchline: "A bulldozer!" },
@@ -122,58 +135,62 @@
       { prompt: "Why did the sheep go to the beach?", punchline: "To get a little baa-tan!" },
       { prompt: "What do you call a cow that plays the guitar?", punchline: "A moo-sician!" },
       { prompt: "Why can’t cats play poker?", punchline: "Too many cheetahs." },
-      { prompt: "Why did the bird go to school?", punchline: "To improve his tweet-eracy!" }
+      { prompt: "Why did the bird go to school?", punchline: "To improve his tweet-eracy!" },
       { prompt: "Why do kangaroos hate rainy days?", punchline: "Because the kids have to play inside the pouch." },
-{ prompt: "What do you get when you cross a pig and a centipede?", punchline: "Bacon and legs!" },
-{ prompt: "Why was the bee’s report card sticky?", punchline: "It was covered in honey!" },
-{ prompt: "Why are snails so bad at races?", punchline: "Because they’re shell-shocked." },
-{ prompt: "What do you call a deer with no eyes?", punchline: "No eye-deer." },
-{ prompt: "Why did the goat go to art school?", punchline: "He wanted to learn how to draw horns." },
-{ prompt: "What kind of dog loves to take bubble baths?", punchline: "A shampoodle." },
-{ prompt: "Why did the skunk apply for a job?", punchline: "He was scent unemployed." },
-{ prompt: "What do birds give out on Halloween?", punchline: "Tweets." },
-{ prompt: "What’s a crocodile’s favorite party game?", punchline: "Snap!" },
-{ prompt: "Why did the cow get promoted?", punchline: "He was outstanding in his field." },
-{ prompt: "What did the mouse say to the keyboard?", punchline: "You’re just my type." },
-{ prompt: "Why don’t cats play baseball?", punchline: "They can’t stop chasing the bat." },
-{ prompt: "Why did the owl get hired?", punchline: "Because he was a real hoot at interviews." },
-{ prompt: "What kind of fish is always on time?", punchline: "A clockfish." },
-{ prompt: "Why are flamingos so good at stand-up?", punchline: "They already have great legs." },
-{ prompt: "What do you call a cat who loves math?", punchline: "A calcu-purr." },
-{ prompt: "Why did the monkey bring a ladder?", punchline: "To reach the top banana." },
-{ prompt: "Why did the hamster cross the road?", punchline: "Because his wheel broke!" },
-{ prompt: "Why don’t lobsters ever share?", punchline: "Because they’re shellfish." },
-{ prompt: "What do you call a nervous horse?", punchline: "A jitterbug." },
-{ prompt: "What did the dolphin say to the annoying whale?", punchline: "You blow things out of proportion!" },
-{ prompt: "Why did the snake fail his test?", punchline: "He had hiss-terical answers." },
-{ prompt: "What’s a wolf’s favorite holiday?", punchline: "Howl-o-ween!" },
-{ prompt: "What did the buffalo say to his son when he left for school?", punchline: "Bison." },
-{ prompt: "Why did the spider become a web designer?", punchline: "It had an eye for threads." },
-{ prompt: "What kind of dog can tell time?", punchline: "A watch-dog." },
-{ prompt: "What do you call a kangaroo who tells jokes?", punchline: "A pun-roo." },
-{ prompt: "Why did the sloth cancel his date?", punchline: "He didn’t want to rush into things." },
-{ prompt: "What’s a zebra’s favorite pattern?", punchline: "Stripey!" },
-{ prompt: "Why do cows wear bells?", punchline: "Because their horns don’t work." },
-{ prompt: "What do you call an octopus that sings?", punchline: "A rocktopus." },
-{ prompt: "What do you call a leopard that plays hide and seek?", punchline: "Spotless." },
-{ prompt: "Why don’t pigs use cellphones?", punchline: "They always hog the line." },
-{ prompt: "What’s a sheep’s favorite game?", punchline: "Baa-dminton." },
-{ prompt: "What do you call a bird that’s afraid to fly?", punchline: "A chicken." },
-{ prompt: "Why did the rooster win an award?", punchline: "He was egg-ceptional!" },
-{ prompt: "What kind of cat loves water?", punchline: "An octo-puss." },
-{ prompt: "Why did the duck go to math class?", punchline: "He wanted to learn quackulations!" },
-{ prompt: "Why was the cheetah always late?", punchline: "He was fast asleep." },
-{ prompt: "What do you call a lion that tells jokes?", punchline: "A comedi-roar." },
-{ prompt: "Why don’t giraffes do gymnastics?", punchline: "Too much neck risk." },
-{ prompt: "What did the dog say when he sat on sandpaper?", punchline: "Ruff!" },
-{ prompt: "What do owls say when they’re surprised?", punchline: "Owl be darned!" },
-{ prompt: "Why do penguins always carry fish?", punchline: "For ice-breakers." },
-{ prompt: "What do you get when you cross a squirrel and a computer?", punchline: "A nutwork!" },
-{ prompt: "What did one flea say to the other?", punchline: "Should we walk or take a dog?" },
-{ prompt: "Why are ducks good at time management?", punchline: "They don’t quack under pressure." },
-{ prompt: "What do you get when you cross a rabbit with an insect?", punchline: "Bugs Bunny!" },
-{ prompt: "Why did the bear bring a backpack?", punchline: "For his bear necessities." }
+      { prompt: "What do you get when you cross a pig and a centipede?", punchline: "Bacon and legs!" },
+      { prompt: "Why was the bee’s report card sticky?", punchline: "It was covered in honey!" },
+      { prompt: "Why are snails so bad at races?", punchline: "Because they’re shell-shocked." },
+      { prompt: "What do you call a deer with no eyes?", punchline: "No eye-deer." },
+      { prompt: "Why did the goat go to art school?", punchline: "He wanted to learn how to draw horns." },
+      { prompt: "What kind of dog loves to take bubble baths?", punchline: "A shampoodle." },
+      { prompt: "Why did the skunk apply for a job?", punchline: "He was scent unemployed." },
+      { prompt: "What do birds give out on Halloween?", punchline: "Tweets." },
+      { prompt: "What’s a crocodile’s favorite party game?", punchline: "Snap!" },
+      { prompt: "Why did the cow get promoted?", punchline: "He was outstanding in his field." },
+      { prompt: "What did the mouse say to the keyboard?", punchline: "You’re just my type." },
+      { prompt: "Why don’t cats play baseball?", punchline: "They can’t stop chasing the bat." },
+      { prompt: "Why did the owl get hired?", punchline: "Because he was a real hoot at interviews." },
+      { prompt: "What kind of fish is always on time?", punchline: "A clockfish." },
+      { prompt: "Why are flamingos so good at stand-up?", punchline: "They already have great legs." },
+      { prompt: "What do you call a cat who loves math?", punchline: "A calcu-purr." },
+      { prompt: "Why did the monkey bring a ladder?", punchline: "To reach the top banana." },
+      { prompt: "Why did the hamster cross the road?", punchline: "Because his wheel broke!" },
+      { prompt: "Why don’t lobsters ever share?", punchline: "Because they’re shellfish." },
+      { prompt: "What do you call a nervous horse?", punchline: "A jitterbug." },
+      { prompt: "What did the dolphin say to the annoying whale?", punchline: "You blow things out of proportion!" },
+      { prompt: "Why did the snake fail his test?", punchline: "He had hiss-terical answers." },
+      { prompt: "What’s a wolf’s favorite holiday?", punchline: "Howl-o-ween!" },
+      { prompt: "What did the buffalo say to his son when he left for school?", punchline: "Bison." },
+      { prompt: "Why did the spider become a web designer?", punchline: "It had an eye for threads." },
+      { prompt: "What kind of dog can tell time?", punchline: "A watch-dog." },
+      { prompt: "What do you call a kangaroo who tells jokes?", punchline: "A pun-roo." },
+      { prompt: "Why did the sloth cancel his date?", punchline: "He didn’t want to rush into things." },
+      { prompt: "What’s a zebra’s favorite pattern?", punchline: "Stripey!" },
+      { prompt: "Why do cows wear bells?", punchline: "Because their horns don’t work." },
+      { prompt: "What do you call an octopus that sings?", punchline: "A rocktopus." },
+      { prompt: "What do you call a leopard that plays hide and seek?", punchline: "Spotless." },
+      { prompt: "Why don’t pigs use cellphones?", punchline: "They always hog the line." },
+      { prompt: "What’s a sheep’s favorite game?", punchline: "Baa-dminton." },
+      { prompt: "What do you call a bird that’s afraid to fly?", punchline: "A chicken." },
+      { prompt: "Why did the rooster win an award?", punchline: "He was egg-ceptional!" },
+      { prompt: "What kind of cat loves water?", punchline: "An octo-puss." },
+      { prompt: "Why did the duck go to math class?", punchline: "He wanted to learn quackulations!" },
+      { prompt: "Why was the cheetah always late?", punchline: "He was fast asleep." },
+      { prompt: "What do you call a lion that tells jokes?", punchline: "A comedi-roar." },
+      { prompt: "Why don’t giraffes do gymnastics?", punchline: "Too much neck risk." },
+      { prompt: "What did the dog say when he sat on sandpaper?", punchline: "Ruff!" },
+      { prompt: "What do owls say when they’re surprised?", punchline: "Owl be darned!" },
+      { prompt: "Why do penguins always carry fish?", punchline: "For ice-breakers." },
+      { prompt: "What do you get when you cross a squirrel and a computer?", punchline: "A nutwork!" },
+      { prompt: "What did one flea say to the other?", punchline: "Should we walk or take a dog?" },
+      { prompt: "Why are ducks good at time management?", punchline: "They don’t quack under pressure." },
+      { prompt: "What do you get when you cross a rabbit with an insect?", punchline: "Bugs Bunny!" },
+      { prompt: "Why did the bear bring a backpack?", punchline: "For his bear necessities." }
     ];
+
+    function updateCoinDisplay() {
+      document.getElementById("coin-count").innerText = "Coins: " + getCoinCount();
+    }
 
     function getJoke() {
       if (!spendCoins(2)) {
@@ -186,11 +203,16 @@
       document.getElementById("jokePunchline").innerText = jokes[index].punchline;
       document.getElementById("jokePunchline").style.display = "none";
       document.querySelector(".answer-button").style.display = "inline-block";
+      updateCoinDisplay();
     }
 
     function showAnswer() {
       document.getElementById("jokePunchline").style.display = "block";
       document.querySelector(".answer-button").style.display = "none";
     }
+
+    window.getJoke = getJoke;
+    window.showAnswer = showAnswer;
+    updateCoinDisplay();
   </script></body>
 </html>
