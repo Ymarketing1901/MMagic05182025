@@ -112,6 +112,15 @@
     <button onclick="checkG5()">Check</button>
     <div class="feedback" id="r-5"></div>
   </div>  <script>
+  const selectedGrade = localStorage.getItem("grade-select");
+  const gradeIds = ["k", "1", "2", "3", "4", "5"];
+
+  gradeIds.forEach(g => {
+    const section = document.getElementById(`grade-${g}`);
+    if (section) {
+      section.style.display = (g === selectedGrade || (selectedGrade === "0" && g === "k")) ? "block" : "none";
+    }
+  });
     function score(idPrefix, answers, displayId) {
       let score = 0;
       let feedback = [];
@@ -131,4 +140,4 @@
     function checkG4() { score('g4q', [463, 8, 'india'], 'r-4'); }
     function checkG5() { score('g5q', [5, 2610, 4900, 5550, 'car'], 'r-5'); }
   </script></body>
-</html>
+</html> 
