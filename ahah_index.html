@@ -1,0 +1,146 @@
+
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laugh Factory</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      background: url('ahah.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+      text-shadow: 2px 2px #000;
+    }h1 {
+  margin-top: 40px;
+  font-size: 3em;
+}
+
+.joke-box {
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 600px;
+  margin: 20px;
+}
+
+.joke-button, .answer-button {
+  background-color: #ffcc00;
+  border: none;
+  color: black;
+  padding: 12px 25px;
+  margin: 10px;
+  font-size: 1.2em;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.joke-button:hover, .answer-button:hover {
+  background-color: #ffaa00;
+}
+
+#back-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: url('back_map5.png') no-repeat center center;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Laugh Factory</h1>
+  <div class="joke-box">
+    <div id="jokePrompt">Press the button for a joke!</div>
+    <div id="jokePunchline" style="display:none; margin-top: 10px;"></div>
+    <button class="joke-button" onclick="getJoke()">Tell me a joke (2 coins)</button>
+    <button class="answer-button" onclick="showAnswer()" style="display:none;">Show Answer</button>
+  </div><button id="back-button" onclick="window.location.href='map_map5.html'"></button>
+
+  <script src="coinEngine.js"></script>  <script>
+    const jokes = [
+      { prompt: "Why did the cow become an astronaut?", punchline: "Because it wanted to see the moooon!" },
+      { prompt: "What do you call a sleeping bull?", punchline: "A bulldozer!" },
+      { prompt: "Why did the cat sit on the computer?", punchline: "It wanted to keep an eye on the mouse." },
+      { prompt: "What do you call a dog magician?", punchline: "A labracadabrador!" },
+      { prompt: "What do frogs like to drink?", punchline: "Croak-a-cola!" },
+      { prompt: "Why don't elephants use computers?", punchline: "They're afraid of the mouse." },
+      { prompt: "How do you count cows?", punchline: "With a cowculator!" },
+      { prompt: "Why did the duck cross the playground?", punchline: "To get to the other slide!" },
+      { prompt: "What's a snake’s favorite subject?", punchline: "Hiss-tory!" },
+      { prompt: "What kind of math do owls love?", punchline: "Owlgebra!" },
+      { prompt: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+      { prompt: "Why did the horse go behind the tree?", punchline: "To change his jockeys!" },
+      { prompt: "What’s a cat’s favorite color?", punchline: "Purr-ple!" },
+      { prompt: "Why do fish live in saltwater?", punchline: "Because pepper makes them sneeze!" },
+      { prompt: "What do you get when you cross a sheep and a kangaroo?", punchline: "A woolly jumper!" },
+      { prompt: "Why did the giraffe get bad grades?", punchline: "His head was always in the clouds." },
+      { prompt: "What do you call a pig who knows karate?", punchline: "Pork chop!" },
+      { prompt: "Why was the crab so bad at sharing?", punchline: "Because he was a little shellfish!" },
+      { prompt: "What do you call an alligator in a vest?", punchline: "An investi-gator!" },
+      { prompt: "Why can’t you play cards in the jungle?", punchline: "Too many cheetahs!" },
+      { prompt: "Why did the turtle cross the road?", punchline: "To get to the Shell station." },
+      { prompt: "What sound do porcupines make when they kiss?", punchline: "Ouch!" },
+      { prompt: "Why are frogs so happy?", punchline: "Because they eat whatever bugs them." },
+      { prompt: "What do you call a dancing sheep?", punchline: "A baa-lerina!" },
+      { prompt: "What’s a rabbit’s favorite music?", punchline: "Hip-hop!" },
+      { prompt: "How does a lion like his meat?", punchline: "Roar!" },
+      { prompt: "What did the cat say when he lost all his money?", punchline: "I’m paw!" },
+      { prompt: "What do you call a fish that wears a bowtie?", punchline: "Sofishticated." },
+      { prompt: "Why did the chicken join a band?", punchline: "Because it had the drumsticks!" },
+      { prompt: "What do you get when you cross a snake and a pie?", punchline: "A python!" },
+      { prompt: "Why did the ant bring a suitcase to school?", punchline: "Because it was going on a field trip." },
+      { prompt: "Why do bees have sticky hair?", punchline: "Because they use honeycombs!" },
+      { prompt: "What’s a bat’s favorite game?", punchline: "Bat-minton!" },
+      { prompt: "Why did the fox bring toilet paper to the party?", punchline: "He was a party pooper." },
+      { prompt: "Why are dogs bad at math?", punchline: "They can't stop barking up the wrong tree." },
+      { prompt: "What do you get when you cross a dog and a calculator?", punchline: "A friend you can count on." },
+      { prompt: "Why are turtles never stressed?", punchline: "Because they just shellax." },
+      { prompt: "What do cows read at bedtime?", punchline: "Dairy tales." },
+      { prompt: "Why don’t pandas like fast food?", punchline: "Because they can’t catch it!" },
+      { prompt: "What’s a horse’s favorite sport?", punchline: "Stable tennis!" },
+      { prompt: "What did the lion say after finishing his meal?", punchline: "I’m stuffed!" },
+      { prompt: "Why did the parrot get a timeout?", punchline: "It kept repeating everything!" },
+      { prompt: "Why did the whale blush?", punchline: "Because it saw the ocean’s bottom!" },
+      { prompt: "Why was the dog a great musician?", punchline: "He had perfect pooch!" },
+      { prompt: "What do you get when you cross an elephant with a fish?", punchline: "Swimming trunks!" },
+      { prompt: "What did the duck say after buying lipstick?", punchline: "Put it on my bill." },
+      { prompt: "Why did the sheep go to the beach?", punchline: "To get a little baa-tan!" },
+      { prompt: "What do you call a cow that plays the guitar?", punchline: "A moo-sician!" },
+      { prompt: "Why can’t cats play poker?", punchline: "Too many cheetahs." },
+      { prompt: "Why did the bird go to school?", punchline: "To improve his tweet-eracy!" }
+    ];
+
+    function getJoke() {
+      if (!spendCoins(2)) {
+        alert("You don't have enough coins!");
+        return;
+      }
+
+      const index = Math.floor(Math.random() * jokes.length);
+      document.getElementById("jokePrompt").innerText = jokes[index].prompt;
+      document.getElementById("jokePunchline").innerText = jokes[index].punchline;
+      document.getElementById("jokePunchline").style.display = "none";
+      document.querySelector(".answer-button").style.display = "inline-block";
+    }
+
+    function showAnswer() {
+      document.getElementById("jokePunchline").style.display = "block";
+      document.querySelector(".answer-button").style.display = "none";
+    }
+  </script></body>
+</html>
