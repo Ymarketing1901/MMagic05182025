@@ -1,0 +1,134 @@
+
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eiffel Learning Hub</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: sans-serif;
+      background: url('eiffel.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    h1 {
+      background-color: rgba(0,0,0,0.6);
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .section {
+      background-color: rgba(255, 255, 255, 0.95);
+      color: black;
+      margin: 2rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .intro {
+      font-style: italic;
+      background-color: #f0f0ff;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    input[type="number"], input[type="text"] {
+      width: 6rem;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌍 Eiffel Learning Hub – Grades K–5</h1>  <!-- Grade K -->  <div class="section">
+    <h2>Kindergarten – Fruits & Bugs</h2>
+    <p class="intro">Let's have fun counting with apples, ladybugs, and other colorful things! These problems will help you practice adding and subtracting small numbers.</p>
+    <p>1. 3 red apples + 2 green apples = <input type="number" id="k1"> apples</p>
+    <p>2. 6 + 4 ladybug spots = <input type="number" id="k2"> spots</p>
+    <p>3. 5 bananas - 2 eaten = <input type="number" id="k3"> bananas</p>
+    <p>4. 4 butterflies + 3 more = <input type="number" id="k4"> butterflies</p>
+    <p>5. 7 strawberries - 3 given away = <input type="number" id="k5"> strawberries</p>
+    <button onclick="checkK()">Check</button>
+    <div class="feedback" id="r-k"></div>
+  </div>  <!-- Grade 1 -->  <div class="section">
+    <h2>Grade 1 – Animal Groups</h2>
+    <p class="intro">Animals often live in groups to help them stay safe and find food. Did you know a group of lions is called a pride, and a group of fish is called a school? Let’s learn some animal names and practice our adding and subtracting!</p>
+    <p>1. 5 lions + 3 lions = <input type="number" id="g1q1"></p>
+    <p>2. 9 fish - 4 swim away = <input type="number" id="g1q2"></p>
+    <p>3. 6 penguins + 2 = <input type="number" id="g1q3"></p>
+    <p>4. 8 elephants - 3 = <input type="number" id="g1q4"></p>
+    <p>5. 7 kangaroos + 5 = <input type="number" id="g1q5"></p>
+    <button onclick="checkG1()">Check</button>
+    <div class="feedback" id="r-1"></div>
+  </div>  <!-- Grade 2 -->  <div class="section">
+    <h2>Grade 2 – World Rivers</h2>
+    <p class="intro">Rivers are like the veins of the Earth. They carry fresh water across long distances, help plants and animals grow, and give humans water for drinking and farming. Some rivers are so long they flow through many countries! Adventurers sometimes travel down rivers by boat. Let’s explore some of the longest rivers in the world and imagine what it’s like to travel them.</p>
+    <p>1. Nile + Yangtze = <input type="number" id="g2q1"> km</p>
+    <p>2. Nile + Yangtze - Amazon = <input type="number" id="g2q2"> km</p>
+    <p>3. Longest - shortest river = <input type="number" id="g2q3"> km</p>
+    <p>4. Mississippi + Parana = <input type="number" id="g2q4"> km</p>
+    <p>5. Which is longer: Danube or Murray? <input type="text" id="g2q5"></p>
+    <button onclick="checkG2()">Check</button>
+    <div class="feedback" id="r-2"></div>
+  </div>  <!-- Grade 3 -->  <div class="section">
+    <h2>Grade 3 – Tallest Mountains</h2>
+    <p class="intro">Mountains play a powerful role in our world. They affect our climate by capturing moisture, creating rain shadows, and storing snow that feeds rivers. They're home to unique animals and plants. Explorers climb them to test their limits—but the weather, thin air, and steep cliffs make mountaineering risky.</p>
+    <p>1. Everest + Kilimanjaro = <input type="number" id="g3q1"> m</p>
+    <p>2. Everest - Kilimanjaro = <input type="number" id="g3q2"> m</p>
+    <p>3. Highest - lowest = <input type="number" id="g3q3"> m</p>
+    <p>4. Everest + Aconcagua = <input type="number" id="g3q4"> m</p>
+    <p>5. Everest - Aconcagua = <input type="number" id="g3q5"> m</p>
+    <button onclick="checkG3()">Check</button>
+    <div class="feedback" id="r-3"></div>
+  </div>  <!-- Grade 4 -->  <div class="section">
+    <h2>Grade 4 – Population Density</h2>
+    <p class="intro">Population density tells us how many people live in a certain amount of land. It’s usually measured in people per square kilometer. High density might mean more traffic and apartments, while low density can mean more nature and longer distances to schools and stores.</p>
+    <p>1. India: 1390 ÷ 3 = <input type="number" id="g4q1"></p>
+    <p>2. Russia: 144 ÷ 17 = <input type="number" id="g4q2"></p>
+    <p>3. Which has higher density? <input type="text" id="g4q3"></p>
+    <button onclick="checkG4()">Check</button>
+    <div class="feedback" id="r-4"></div>
+  </div>  <!-- Grade 5 -->  <div class="section">
+    <h2>Grade 5 – Space Travel</h2>
+    <p class="intro">Space is huge—so huge that scientists use big units like millions of kilometers to measure distances. Even the nearest planets are incredibly far away! Let’s imagine how long it would take to reach different planets using cars, rockets, or even walking.</p>
+    <p>1. Mars by rocket (40,000 km/h) = <input type="number" id="g5q1"> hours</p>
+    <p>2. Venus by car (100 km/h) = <input type="number" id="g5q2"> hours</p>
+    <p>3. Jupiter by walking (5 km/h) = <input type="number" id="g5q3"> days</p>
+    <p>4. Saturn + Neptune = <input type="number" id="g5q4"> million km</p>
+    <p>5. Which trip is longer? Mars by car or Venus by rocket? <input type="text" id="g5q5"></p>
+    <button onclick="checkG5()">Check</button>
+    <div class="feedback" id="r-5"></div>
+  </div>  <script>
+    function score(idPrefix, answers, displayId) {
+      let score = 0;
+      let feedback = [];
+      answers.forEach((a, i) => {
+        const el = document.getElementById(`${idPrefix}${i + 1}`);
+        const val = el.type === 'number' ? parseInt(el.value) : el.value.trim().toLowerCase();
+        const correct = typeof a === 'string' ? a.toLowerCase() : a;
+        if (val === correct) score += 2;
+        else feedback.push(`Q${i + 1}: expected ${a}`);
+      });
+      document.getElementById(displayId).innerHTML = `Score: ${score} / ${answers.length * 2}` + (feedback.length ? '<ul>' + feedback.map(x => `<li>${x}</li>`).join('') + '</ul>' : '');
+    }
+    function checkK() { score('k', [5, 10, 3, 7, 4], 'r-k'); }
+    function checkG1() { score('g1q', [8, 5, 8, 5, 12], 'r-1'); }
+    function checkG2() { score('g2q', [12950, 8550, 4142, 11155, 'danube'], 'r-2'); }
+    function checkG3() { score('g3q', [14744, 2954, 4042, 15809, 1889], 'r-3'); }
+    function checkG4() { score('g4q', [463, 8, 'india'], 'r-4'); }
+    function checkG5() { score('g5q', [5, 2610, 4900, 5550, 'car'], 'r-5'); }
+  </script></body>
+</html>
